@@ -8,7 +8,19 @@ note:
 
 installation:
 
-  add `source /path/to/fm` to the '~/.zshrc' file.
+  - add the 'fm' script to $PATH
+
+  - to cd to last open directory in fm, add the following to your '~/.zshrc'
+    file:
+
+      #start fm, and cd to last directory on exit
+      l() {   
+              # store last directory in a temporary file
+              tmp="$(mktemp)"
+              fm $tmp
+              cd "$(cat "$tmp")"
+              rm -f "$tmp"
+      }
 
 usage:
 

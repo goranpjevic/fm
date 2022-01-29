@@ -95,6 +95,11 @@ print_output() {
 fm() {
 	tput smcup
 	let "last_line_number = $(tput lines) - 1"
-	show_hidden = 1
+	let "show_hidden = 1"
 	print_output $(pwd)
+	if [ $1 ]; then
+		pwd > $1
+	fi
 }
+
+fm $1
