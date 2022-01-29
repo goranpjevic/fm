@@ -10,6 +10,12 @@ go_to() {
 
 update_position() {
 	let "current_line = $1"
+	if [ $current_line -gt $number_of_lines ]; then
+		let "current_line = $number_of_lines"
+	elif [ $current_line -lt 0 ]; then
+		let "current_line = 0"
+	fi
+
 	let "actual_line = $current_line + 1"
 	chosen_line=$(echo $output | sed "${actual_line}q;d")
 }
@@ -69,12 +75,6 @@ print_output() {
 				move_line $current_line
 				;;
 		esac
-
-		if [ $current_line -gt $number_of_lines ]; then
-			move_line $number_of_lines
-		elif [ $current_line -lt 0 ]; then
-			move_line 0
-		fi
 	done
 
 	print_output $(pwd)
