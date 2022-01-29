@@ -58,7 +58,7 @@ draw_screen() {
 	move_line $current_line
 }
 
-print_output() {
+read_keys() {
 	draw_screen
 
 	refresh=true
@@ -108,14 +108,14 @@ print_output() {
 		esac
 	done
 
-	print_output $(pwd)
+	read_keys $(pwd)
 }
 
 fm() {
 	tput smcup
 	let "show_hidden = 0"
 	trap draw_screen WINCH
-	print_output $(pwd)
+	read_keys $(pwd)
 	if [ $1 ]; then
 		pwd > $1
 	fi
