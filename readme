@@ -1,0 +1,7 @@
+                                  file manager
+
+terminal file manager.
+
+installation:
+
+  add `source /path/to/fm` to the shell rc file.
