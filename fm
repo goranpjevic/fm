@@ -52,7 +52,7 @@ print_output() {
 
 	refresh=true
 	while $refresh; do
-		read -k 1 key
+		read -rsk 1 key
 
 		case $key in
 			j)
@@ -85,9 +85,6 @@ print_output() {
 				tput clear
 				tput rmcup
 				return
-				;;
-			*)
-				move_line $current_line
 				;;
 		esac
 	done
