@@ -41,7 +41,7 @@ draw_screen() {
         tput civis
 
         if [ "$show_hidden" = 1 ]; then
-                output=$(ls -a $1 | sed "1,2d")
+                output=$(ls -A)
         else
                 output=$(ls)
         fi
