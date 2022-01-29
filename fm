@@ -12,12 +12,11 @@ update_position() {
 	let "current_line = $1"
 	if [ $current_line -gt $number_of_lines ]; then
 		let "current_line = $number_of_lines"
-	elif [ $current_line -lt 0 ]; then
-		let "current_line = 0"
+	elif [ $current_line -lt 1 ]; then
+		let "current_line = 1"
 	fi
 
-	let "actual_line = $current_line + 1"
-	chosen_line=$(echo $output | sed "${actual_line}q;d")
+	chosen_line=$(echo $output | sed "${current_line}q;d")
 }
 
 move_line() {
@@ -48,11 +47,15 @@ print_output() {
 		output=$(ls)
 	fi
 
-	current_line=0
-	let "number_of_lines=$(echo $output | wc -l) - 1"
+	tput bold
+	echo $(pwd)
+	tput sgr0
+
+	current_line=1
+	let "number_of_lines=$(echo $output | wc -l)"
 	echo $output
 
-	move_line 0
+	move_line 1
 
 	refresh=true
 	while $refresh; do
