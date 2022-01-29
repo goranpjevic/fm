@@ -34,10 +34,16 @@ move_line() {
 	tput cup $last_line_number
 }
 
+
 print_output() {
 	tput clear
 
-	output=$(ls -a $1)
+	if [ "$show_hidden" = 1 ]; then
+		output=$(ls -a $1)
+	else
+		output='..\n'$(ls)
+	fi
+
 	current_line=0
 	let "number_of_lines=$(echo $output | wc -l) - 1"
 	echo $output
@@ -66,6 +72,10 @@ print_output() {
 				go_to $chosen_line
 				refresh=false
 				;;
+			z)
+				((show_hidden ^= 1))
+				refresh=false
+				;;
 			q)
 				tput clear
 				tput rmcup
@@ -83,5 +93,6 @@ print_output() {
 fm() {
 	tput smcup
 	let "last_line_number = $(tput lines) - 1"
+	show_hidden = 1
 	print_output $(pwd)
 }
