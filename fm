@@ -39,9 +39,9 @@ print_output() {
 	tput clear
 
 	if [ "$show_hidden" = 1 ]; then
-		output=$(ls -a $1 | sed "1d")
+		output=$(ls -a $1 | sed "1,2d")
 	else
-		output='..\n'$(ls)
+		output=$(ls)
 	fi
 
 	current_line=0
@@ -70,6 +70,11 @@ print_output() {
 			l)
 				tput clear
 				go_to $chosen_line
+				refresh=false
+				;;
+			h)
+				tput clear
+				go_to '..'
 				refresh=false
 				;;
 			z)
