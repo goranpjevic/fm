@@ -31,4 +31,5 @@ usage:
   l/'right' - go to directory or open a file in vim
   h/'left' - go to the parent directory
   z - toggle hidden files
+  ~ - cd to $HOME
   q - quit fm

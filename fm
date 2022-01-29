@@ -89,6 +89,10 @@ print_output() {
 				((show_hidden ^= 1))
 				refresh=false
 				;;
+			'~')
+				cd ~
+				refresh=false
+				;;
 			q)
 				tput clear
 				tput rmcup
