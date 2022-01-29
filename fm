@@ -30,10 +30,9 @@ move_line() {
 	echo $chosen_line
 
 	tput sgr0
-	let "last_line_number = $(tput lines) - 2"
-	tput cup $last_line_number
+	tput cup $(tput lines)
 	tput el
-	echo $(ls -ld $chosen_line)
+	printf "$(ls -ld $chosen_line)"
 }
 
 
