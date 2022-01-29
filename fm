@@ -1,0 +1,87 @@
+#!/bin/sh
+
+go_to() {
+	if [ -d $1 ]; then
+		cd $1
+	else
+		vim $1
+	fi
+}
+
+update_position() {
+	let "current_line = $1"
+	let "actual_line = $current_line + 1"
+	chosen_line=$(echo $output | sed "${actual_line}q;d")
+}
+
+move_line() {
+	tput cup $current_line
+	update_position $current_line
+	echo $chosen_line
+
+	update_position $1
+	tput rev
+	tput cup $current_line
+	echo $chosen_line
+
+	tput sgr0
+	tput cup $last_line_number
+}
+
+print_output() {
+	tput clear
+
+	output=$(ls -a $1)
+	current_line=0
+	let "number_of_lines=$(echo $output | wc -l) - 1"
+	echo $output
+
+	move_line 0
+
+	refresh=true
+	while $refresh; do
+		read -k 1 key
+
+		case $key in
+			j)
+				move_line "$current_line + 1"
+				;;
+			k)
+				move_line "$current_line - 1"
+				;;
+			g)
+				move_line 0
+				;;
+			G)
+				move_line $number_of_lines
+				;;
+			l)
+				tput clear
+				go_to $chosen_line
+				refresh=false
+				;;
+			q)
+				tput clear
+				tput rmcup
+				return
+				;;
+			*)
+				move_line $current_line
+				;;
+		esac
+
+		if [ $current_line -gt $number_of_lines ]; then
+			move_line $number_of_lines
+		elif [ $current_line -lt 0 ]; then
+			move_line 0
+		fi
+	done
+
+	print_output $(pwd)
+}
+
+fm() {
+	tput smcup
+	let "last_line_number = $(tput lines) - 1"
+	print_output $(pwd)
+}
