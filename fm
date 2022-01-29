@@ -61,8 +61,7 @@ draw_screen() {
 read_keys() {
 	draw_screen
 
-	refresh=true
-	while $refresh; do
+	while true; do
 		escape_char=$(printf "\u1b")
 		read -sk1 key
 		if [ $key = $escape_char ]; then
@@ -85,20 +84,20 @@ read_keys() {
 			'l'|'[C')
 				tput clear
 				go_to $chosen_line
-				refresh=false
+				draw_screen
 				;;
 			'h'|'[D')
 				tput clear
 				go_to '..'
-				refresh=false
+				draw_screen
 				;;
 			'z')
 				((show_hidden ^= 1))
-				refresh=false
+				draw_screen
 				;;
 			'~')
 				cd ~
-				refresh=false
+				draw_screen
 				;;
 			'q')
 				tput clear
@@ -107,8 +106,6 @@ read_keys() {
 				;;
 		esac
 	done
-
-	read_keys $(pwd)
 }
 
 fm() {
