@@ -37,6 +37,7 @@ move_line() {
 
 print_output() {
 	tput clear
+	tput civis
 
 	if [ "$show_hidden" = 1 ]; then
 		output=$(ls -a $1 | sed "1,2d")
@@ -99,6 +100,7 @@ fm() {
 	if [ $1 ]; then
 		pwd > $1
 	fi
+	tput cnorm
 }
 
 fm $1
