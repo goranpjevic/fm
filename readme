@@ -2,9 +2,13 @@
 
 terminal file manager.
 
+note:
+
+  'fm' only works in zsh.
+
 installation:
 
-  add `source /path/to/fm` to the shell rc file.
+  add `source /path/to/fm` to the '~/.zshrc' file.
 
 usage:
 
