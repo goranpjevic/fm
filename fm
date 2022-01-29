@@ -69,10 +69,10 @@ print_output() {
 			'k'|'[A')
 				move_line "$current_line - 1"
 				;;
-			g)
+			'g')
 				move_line 0
 				;;
-			G)
+			'G')
 				move_line $number_of_lines
 				;;
 			'l'|'[C')
@@ -85,7 +85,7 @@ print_output() {
 				go_to '..'
 				refresh=false
 				;;
-			z)
+			'z')
 				((show_hidden ^= 1))
 				refresh=false
 				;;
@@ -93,7 +93,7 @@ print_output() {
 				cd ~
 				refresh=false
 				;;
-			q)
+			'q')
 				tput clear
 				tput rmcup
 				return
