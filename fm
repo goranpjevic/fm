@@ -34,7 +34,7 @@ move_line() {
 	let "last_line_number = $(tput lines) - 2"
 	tput cup $last_line_number
 	tput el
-	echo $(find . -maxdepth 1 -name $chosen_line -exec ls -ld {} \;)
+	echo $(ls -ld $chosen_line)
 }
 
 
