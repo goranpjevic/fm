@@ -52,7 +52,7 @@ print_output() {
 
 	refresh=true
 	while $refresh; do
-		read -rsk 1 key
+		read -sk1 key
 
 		case $key in
 			j)
