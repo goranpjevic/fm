@@ -53,13 +53,17 @@ print_output() {
 
 	refresh=true
 	while $refresh; do
+		escape_char=$(printf "\u1b")
 		read -sk1 key
+		if [ $key = $escape_char ]; then
+			read -sk2 key
+		fi
 
 		case $key in
-			j)
+			'j'|'[B')
 				move_line "$current_line + 1"
 				;;
-			k)
+			'k'|'[A')
 				move_line "$current_line - 1"
 				;;
 			g)
@@ -68,12 +72,12 @@ print_output() {
 			G)
 				move_line $number_of_lines
 				;;
-			l)
+			'l'|'[C')
 				tput clear
 				go_to $chosen_line
 				refresh=false
 				;;
-			h)
+			'h'|'[D')
 				tput clear
 				go_to '..'
 				refresh=false

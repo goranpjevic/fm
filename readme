@@ -24,11 +24,11 @@ installation:
 
 usage:
 
-  j - move one line down
-  k - move one line up
+  j/'down' - move one line down
+  k/'up' - move one line up
   g - move to the top
   G - move to the bottom
-  l - go to directory or open a file in vim
-  h - go to the parent directory
+  l/'right' - go to directory or open a file in vim
+  h/'left' - go to the parent directory
   z - toggle hidden files
   q - quit fm
