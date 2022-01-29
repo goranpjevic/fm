@@ -13,4 +13,5 @@ usage:
   g - move to the top
   G - move to the bottom
   l - go to directory or open a file in vim
+  z - toggle hidden files
   q - quit fm
