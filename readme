@@ -5,3 +5,12 @@ terminal file manager.
 installation:
 
   add `source /path/to/fm` to the shell rc file.
+
+usage:
+
+  j - move one line down
+  k - move one line up
+  g - move to the top
+  G - move to the bottom
+  l - go to directory or open a file in vim
+  q - quit fm
