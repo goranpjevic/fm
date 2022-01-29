@@ -39,7 +39,7 @@ print_output() {
 	tput clear
 
 	if [ "$show_hidden" = 1 ]; then
-		output=$(ls -a $1)
+		output=$(ls -a $1 | sed "1d")
 	else
 		output='..\n'$(ls)
 	fi
