@@ -16,6 +16,18 @@ update_position() {
 		let "current_line = 1"
 	fi
 
+	let "previous_line_number = $current_line - 1"
+	if [ $previous_line_number -lt 1 ]; then
+		let "previous_line_number = 1"
+	fi
+	let "next_line_number = $current_line + 1"
+	if [ $next_line_number -gt $number_of_lines ]; then
+		let "previous_line_number = $number_of_lines"
+	fi
+
+	lines_above=$(echo $output | sed -n "1,${previous_line_number}p")
+	lines_below=$(echo $output | sed -n "${next_line_number},\$p")
+
 	chosen_line=$(echo $output | sed "${current_line}q;d")
 }
 
@@ -55,6 +67,31 @@ draw_screen() {
         echo $output
 
 	move_line $current_line
+}
+
+find_forward() {
+	read -sk1 letter
+	lines_down=$(echo $lines_below | sed -ne "/^${letter}/I=" | sed -n "1p")
+	lines_from_top=$(echo $lines_above | sed -ne "/^${letter}/I=" | sed -n "1p")
+	if [ $lines_down ]; then
+		let "line_to_move_to = $current_line + $lines_down"
+		move_line $line_to_move_to
+	elif [ $lines_from_top ]; then
+		move_line $lines_from_top
+	fi
+}
+
+find_backward() {
+	read -sk1 letter
+	lines_up=$(echo $lines_above | sed -ne "/^${letter}/I=" | sed -n "\$p")
+	lines_from_bottom=$(echo $lines_below | sed -ne "/^${letter}/I=" | sed -n "\$p")
+	
+	if [ $lines_up ]; then
+		move_line $lines_up
+	elif [ $lines_from_bottom ]; then
+		let "line_to_move_to = $current_line + $lines_from_bottom"
+		move_line $line_to_move_to
+	fi
 }
 
 read_keys() {
@@ -97,6 +134,12 @@ read_keys() {
 			'~')
 				cd ~
 				draw_screen
+				;;
+			'f')
+				find_forward
+				;;
+			'F')
+				find_backward
 				;;
 			'q')
 				tput clear

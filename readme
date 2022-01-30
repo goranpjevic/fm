@@ -32,4 +32,6 @@ usage:
   h/'left' - go to the parent directory
   z - toggle hidden files
   ~ - cd to $HOME
+  f - move to a line forward starting with a letter (case insensitive)
+  F - move to a line backward starting with a letter (case insensitive)
   q - quit fm
