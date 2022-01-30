@@ -94,6 +94,15 @@ find_backward() {
 	fi
 }
 
+shell_command() {
+	tput cup $(tput lines)
+	tput el
+	printf ":"
+	tput cnorm
+	read command_to_eval
+	eval $command_to_eval
+}
+
 read_keys() {
 	draw_screen
 
@@ -140,6 +149,10 @@ read_keys() {
 				;;
 			'F')
 				find_backward
+				;;
+			':')
+				shell_command
+				draw_screen
 				;;
 			'q')
 				tput clear
