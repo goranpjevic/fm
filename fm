@@ -1,11 +1,17 @@
 #!/bin/zsh
 
 go_to() {
-	if [ -d $1 ]; then
-		cd $1
-	else
-		vim $1
-	fi
+	case $(file $1) in
+		*directory*)
+			cd $1
+			;;
+		*text*)
+			vim $1
+			;;
+		*)
+			open $1
+			;;
+	esac
 }
 
 update_position() {
