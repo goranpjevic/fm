@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 go_to() {
-	case $(file $1) in
+	case $(file --brief $1) in
 		*directory*)
 			cd $1
 			;;
