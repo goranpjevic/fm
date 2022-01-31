@@ -23,16 +23,18 @@ update_position() {
 	fi
 
 	let "previous_line_number = $current_line - 1"
-	if [ $previous_line_number -lt 1 ]; then
-		let "previous_line_number = 1"
-	fi
 	let "next_line_number = $current_line + 1"
-	if [ $next_line_number -gt $number_of_lines ]; then
-		let "previous_line_number = $number_of_lines"
-	fi
 
-	lines_above=$(echo $output | sed -n "1,${previous_line_number}p")
-	lines_below=$(echo $output | sed -n "${next_line_number},\$p")
+	if [ "$previous_line_number" = 0 ]; then
+		lines_above=""
+	else
+		lines_above=$(echo $output | sed -n "1,${previous_line_number}p")
+	fi
+	if [ $next_line_number = $number_of_lines ]; then
+		lines_below=""
+	else
+		lines_below=$(echo $output | sed -n "${next_line_number},\$p")
+	fi
 
 	chosen_line=$(echo $output | sed "${current_line}q;d")
 }
