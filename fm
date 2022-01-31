@@ -145,6 +145,9 @@ quit() {
 	tput clear
 	tput rmcup
 	tput cnorm
+	if [ $1 ]; then
+		pwd > $1
+	fi
 	exit
 }
 
@@ -218,7 +221,7 @@ read_keys() {
 				draw_screen
 				;;
 			'q')
-				quit
+				quit $1
 				return
 				;;
 		esac
@@ -229,11 +232,8 @@ fm() {
 	tput smcup
 	let "show_hidden = 0"
 	trap draw_screen SIGWINCH
-	trap quit SIGINT
-	read_keys $(pwd)
-	if [ $1 ]; then
-		pwd > $1
-	fi
+	trap 'quit $1' SIGINT
+	read_keys $1 $(pwd)
 }
 
 fm $1
