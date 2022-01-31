@@ -37,16 +37,28 @@ update_position() {
 	fi
 
 	chosen_line=$(echo $output | sed "${current_line}q;d")
+
+	if [ $current_line -gt $last_line_to_output ]; then
+		let "first_line_to_output = $current_line - $maximum_lines + 1"
+		actual_line=$maximum_lines
+		draw_screen $current_line
+	elif [ $current_line -lt $first_line_to_output ]; then
+		let "first_line_to_output = $current_line"
+		actual_line=1
+		draw_screen $current_line
+	else
+		let "actual_line = $current_line - $first_line_to_output + 1"
+	fi
 }
 
 move_line() {
 	update_position $current_line
-	tput cup $current_line
+	tput cup $actual_line
 	echo $chosen_line | cut -c 1-$(tput cols)
 
 	update_position $1
 	tput rev
-	tput cup $current_line
+	tput cup $actual_line
 	echo $chosen_line | cut -c 1-$(tput cols)
 
 	tput sgr0
@@ -70,8 +82,13 @@ draw_screen() {
         echo $(pwd) | cut -c 1-$(tput cols)
         tput sgr0
 
+	let "maximum_lines = $(tput lines) - 2"
         let "number_of_lines=$(echo $output | wc -l)"
-        echo $output | cut -c 1-$(tput cols)
+	if [ -z $first_line_to_output ]; then
+		let "first_line_to_output = 1"
+	fi
+	let "last_line_to_output = $first_line_to_output + $maximum_lines - 1"
+	echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$(tput cols)
 
 	if [ $1 ]; then
 		let "current_line = $1"
