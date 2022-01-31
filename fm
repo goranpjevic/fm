@@ -40,17 +40,17 @@ update_position() {
 move_line() {
 	update_position $current_line
 	tput cup $current_line
-	echo $chosen_line
+	echo $chosen_line | cut -c 1-$(tput cols)
 
 	update_position $1
 	tput rev
 	tput cup $current_line
-	echo $chosen_line
+	echo $chosen_line | cut -c 1-$(tput cols)
 
 	tput sgr0
 	tput cup $(tput lines)
 	tput el
-	printf "$(ls -ld $chosen_line)"
+	echo -n $(ls -ld $chosen_line | cut -c 1-$(tput cols))
 }
 
 
@@ -65,11 +65,11 @@ draw_screen() {
         fi
 
         tput bold
-        echo $(pwd)
+        echo $(pwd) | cut -c 1-$(tput cols)
         tput sgr0
 
         let "number_of_lines=$(echo $output | wc -l)"
-        echo $output
+        echo $output | cut -c 1-$(tput cols)
 
 	if [ $1 ]; then
 		let "current_line = $1"
