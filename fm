@@ -141,6 +141,13 @@ shell_command() {
 	eval $command_to_eval
 }
 
+quit() {
+	tput clear
+	tput rmcup
+	tput cnorm
+	exit
+}
+
 read_keys() {
 	draw_screen
 
@@ -211,8 +218,7 @@ read_keys() {
 				draw_screen
 				;;
 			'q')
-				tput clear
-				tput rmcup
+				quit
 				return
 				;;
 		esac
@@ -223,11 +229,11 @@ fm() {
 	tput smcup
 	let "show_hidden = 0"
 	trap draw_screen WINCH
+	trap quit SIGINT
 	read_keys $(pwd)
 	if [ $1 ]; then
 		pwd > $1
 	fi
-	tput cnorm
 }
 
 fm $1

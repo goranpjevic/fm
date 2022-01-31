@@ -41,4 +41,4 @@ usage:
   n - next match
   N - previous match
   : - execute shell command
-  q - quit fm
+  q/'^c' - quit fm
