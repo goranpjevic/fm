@@ -231,7 +231,7 @@ read_keys() {
 fm() {
 	tput smcup
 	let "show_hidden = 0"
-	trap draw_screen SIGWINCH
+	trap 'draw_screen' SIGWINCH
 	trap 'quit $1' SIGINT
 	read_keys $1 $(pwd)
 }
