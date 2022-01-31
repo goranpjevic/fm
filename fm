@@ -146,7 +146,7 @@ quit() {
 	tput rmcup
 	tput cnorm
 	if [ $1 ]; then
-		pwd > $1
+		pwd >> $1
 	fi
 	exit
 }
