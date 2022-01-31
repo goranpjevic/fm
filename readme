@@ -30,7 +30,7 @@ usage:
   k/'up'/^p - move one line up
   g - move to the top
   G - move to the bottom
-  l/'right'/^f - go to directory or open a file in vim
+  l/'right'/^f - go to directory or open a file
   h/'left'/^b - go to the parent directory
   z - toggle hidden files
   ~/^h - cd to $HOME
