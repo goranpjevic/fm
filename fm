@@ -152,10 +152,10 @@ read_keys() {
 		fi
 
 		case $key in
-			'j'|'[B')
+			'j'|'[B'|$(printf '\ue'))
 				move_line "$current_line + 1"
 				;;
-			'k'|'[A')
+			'k'|'[A'|$(printf '\u10'))
 				move_line "$current_line - 1"
 				;;
 			'g')
@@ -164,12 +164,12 @@ read_keys() {
 			'G')
 				move_line $number_of_lines
 				;;
-			'l'|'[C')
+			'l'|'[C'|$(printf '\u6'))
 				tput clear
 				go_to $chosen_line
 				draw_screen
 				;;
-			'h'|'[D')
+			'h'|'[D'|$(printf '\u2'))
 				tput clear
 				go_to '..'
 				draw_screen
@@ -178,7 +178,7 @@ read_keys() {
 				((show_hidden ^= 1))
 				draw_screen
 				;;
-			'~')
+			'~'|$(printf '\u8'))
 				cd ~
 				draw_screen
 				;;

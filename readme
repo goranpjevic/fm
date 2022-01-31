@@ -26,14 +26,14 @@ installation:
 
 usage:
 
-  j/'down' - move one line down
-  k/'up' - move one line up
+  j/'down'/^n - move one line down
+  k/'up'/^p - move one line up
   g - move to the top
   G - move to the bottom
-  l/'right' - go to directory or open a file in vim
-  h/'left' - go to the parent directory
+  l/'right'/^f - go to directory or open a file in vim
+  h/'left'/^b - go to the parent directory
   z - toggle hidden files
-  ~ - cd to $HOME
+  ~/^h - cd to $HOME
   f - find line starting with a letter forward
   F - find line starting with a letter backward
   / - search pattern forward
