@@ -2,9 +2,11 @@
 
 terminal file manager.
 
-note:
+notes:
 
-  'fm' only works in zsh.
+  - 'fm' only works in zsh.
+
+  - all searches are case insensitive
 
 installation:
 
@@ -32,7 +34,11 @@ usage:
   h/'left' - go to the parent directory
   z - toggle hidden files
   ~ - cd to $HOME
-  f - move to a line forward starting with a letter (case insensitive)
-  F - move to a line backward starting with a letter (case insensitive)
+  f - find line starting with a letter forward
+  F - find line starting with a letter backward
+  / - search pattern forward
+  ? - search pattern backward
+  n - next match
+  N - previous match
   : - execute shell command
   q - quit fm

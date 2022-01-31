@@ -68,17 +68,22 @@ draw_screen() {
         echo $(pwd)
         tput sgr0
 
-        let "current_line = 1"
         let "number_of_lines=$(echo $output | wc -l)"
         echo $output
+
+	if [ $1 ]; then
+		let "current_line = $1"
+	else
+		let "current_line = 1"
+	fi
 
 	move_line $current_line
 }
 
-find_forward() {
-	read -sk1 letter
-	lines_down=$(echo $lines_below | sed -ne "/^${letter}/I=" | sed -n "1p")
-	lines_from_top=$(echo $lines_above | sed -ne "/^${letter}/I=" | sed -n "1p")
+search_forward() {
+	lines_down=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "1p")
+	lines_from_top=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "1p")
+
 	if [ $lines_down ]; then
 		let "line_to_move_to = $current_line + $lines_down"
 		move_line $line_to_move_to
@@ -87,10 +92,9 @@ find_forward() {
 	fi
 }
 
-find_backward() {
-	read -sk1 letter
-	lines_up=$(echo $lines_above | sed -ne "/^${letter}/I=" | sed -n "\$p")
-	lines_from_bottom=$(echo $lines_below | sed -ne "/^${letter}/I=" | sed -n "\$p")
+search_backward() {
+	lines_up=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "\$p")
+	lines_from_bottom=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "\$p")
 	
 	if [ $lines_up ]; then
 		move_line $lines_up
@@ -98,6 +102,34 @@ find_backward() {
 		let "line_to_move_to = $current_line + $lines_from_bottom"
 		move_line $line_to_move_to
 	fi
+}
+
+next() {
+	if [ "$search_direction" = 1 ]; then
+		search_forward
+	else
+		search_backward
+	fi
+}
+
+find() {
+	read -sk1 letter
+	pattern='^'$letter
+	next
+}
+
+search() {
+	tput cup $(tput lines)
+	tput el
+	if [ "$search_direction" = 1 ]; then
+		printf "/"
+	else
+		printf "?"
+	fi
+	tput cnorm
+	read pattern
+	next
+	draw_screen $current_line
 }
 
 shell_command() {
@@ -151,10 +183,28 @@ read_keys() {
 				draw_screen
 				;;
 			'f')
-				find_forward
+				let "search_direction = 1"
+				find
 				;;
 			'F')
-				find_backward
+				let "search_direction = 0"
+				find
+				;;
+			'/')
+				let "search_direction = 1"
+				search
+				;;
+			'?')
+				let "search_direction = 0"
+				search
+				;;
+			'n')
+				next
+				;;
+			'N')
+				((search_direction ^= 1))
+				next
+				((search_direction ^= 1))
 				;;
 			':')
 				shell_command
