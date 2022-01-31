@@ -223,7 +223,7 @@ read_keys() {
 				draw_screen
 				;;
 			'q')
-				quit $1
+				quit $2
 				return
 				;;
 		esac
@@ -235,7 +235,7 @@ fm() {
 	let "show_hidden = 0"
 	trap 'draw_screen' SIGWINCH
 	trap 'quit $1' SIGINT
-	read_keys $1 $(pwd)
+	read_keys $(pwd) $1
 }
 
 fm $1
