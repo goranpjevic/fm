@@ -19,7 +19,7 @@ installation:
       l() {   
               # store last directory in a temporary file
               tmp="$(mktemp)"
-              fm $tmp
+              fm ${1:=.} $tmp
               cd "$(cat "$tmp")"
               rm -f "$tmp"
       }
