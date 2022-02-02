@@ -99,6 +99,14 @@ draw_screen() {
 	move_line $current_line
 }
 
+go_to_parent_directory() {
+	current_directory_name=$(basename $(pwd))
+	go_to '..'
+	draw_screen
+	line_to_move_to=$(echo $output | sed -ne "/^${current_directory_name}\$/=")
+	move_line $line_to_move_to
+}
+
 search_forward() {
 	lines_down=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "1p")
 	lines_from_top=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "1p")
@@ -204,9 +212,7 @@ read_keys() {
 				draw_screen
 				;;
 			'h'|'[D'|$(printf '\u2'))
-				tput clear
-				go_to '..'
-				draw_screen
+				go_to_parent_directory
 				;;
 			'z')
 				((show_hidden ^= 1))
