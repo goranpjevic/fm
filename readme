@@ -16,7 +16,7 @@ installation:
     file:
 
       #start fm, and cd to last directory on exit
-      l() {   
+      f() {   
               # store last directory in a temporary file
               tmp="$(mktemp)"
               fm ${1:=.} $tmp
