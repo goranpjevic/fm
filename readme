@@ -40,5 +40,6 @@ usage:
   ? - search pattern backward
   n - next match
   N - previous match
+  e/^k - use a fuzzy finder
   : - execute shell command
   q/'^c' - quit fm

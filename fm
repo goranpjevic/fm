@@ -160,6 +160,11 @@ shell_command() {
 	eval $command_to_eval
 }
 
+fuzzy_find() {
+	go_to $(fzf --preview 'case $(file {}) in\
+		(*directory*) ls -la {} ;; (*text*) cat {} ;; (*) file {} ;; esac')
+}
+
 quit() {
 	tput clear
 	tput rmcup
@@ -234,6 +239,10 @@ read_keys() {
 				((search_direction ^= 1))
 				next
 				((search_direction ^= 1))
+				;;
+			'e'|$(printf '\ub'))
+				fuzzy_find
+				draw_screen
 				;;
 			':')
 				shell_command
