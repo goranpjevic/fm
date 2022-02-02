@@ -217,7 +217,6 @@ read_keys() {
 				move_line $number_of_lines
 				;;
 			'l'|'[C'|$(printf '\u6'))
-				tput clear
 				go_to $chosen_line
 				draw_screen
 				;;
