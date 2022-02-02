@@ -107,6 +107,16 @@ go_to_parent_directory() {
 	move_line $line_to_move_to
 }
 
+toggle_hidden_files() {
+	((show_hidden ^= 1))
+	selected_line=$chosen_line
+	draw_screen
+	line_to_move_to=$(echo $output | sed -ne "/^${selected_line}\$/=")
+	if [ $line_to_move_to ]; then
+		move_line $line_to_move_to
+	fi
+}
+
 search_forward() {
 	lines_down=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "1p")
 	lines_from_top=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "1p")
@@ -215,8 +225,7 @@ read_keys() {
 				go_to_parent_directory
 				;;
 			'z')
-				((show_hidden ^= 1))
-				draw_screen
+				toggle_hidden_files
 				;;
 			'~'|$(printf '\u8'))
 				cd ~
