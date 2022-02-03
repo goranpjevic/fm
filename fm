@@ -103,9 +103,12 @@ go_to_parent_directory() {
 	current_directory_name=${PWD##*/}
 	if [ $current_directory_name ]; then
 		go_to '..'
-		draw_screen
-		line_to_move_to=$(echo $output | sed -ne "/^${current_directory_name}\$/=")
-		move_line $line_to_move_to
+		if [ "$show_hidden" = 1 ]; then
+			line_to_move_to=$(ls -A | sed -ne "/^${current_directory_name}\$/=")
+		else
+			line_to_move_to=$(ls | sed -ne "/^${current_directory_name}\$/=")
+		fi
+		draw_screen $line_to_move_to
 	fi
 }
 
