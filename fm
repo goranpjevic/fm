@@ -101,10 +101,12 @@ draw_screen() {
 
 go_to_parent_directory() {
 	current_directory_name=${PWD##*/}
-	go_to '..'
-	draw_screen
-	line_to_move_to=$(echo $output | sed -ne "/^${current_directory_name}\$/=")
-	move_line $line_to_move_to
+	if [ $current_directory_name ]; then
+		go_to '..'
+		draw_screen
+		line_to_move_to=$(echo $output | sed -ne "/^${current_directory_name}\$/=")
+		move_line $line_to_move_to
+	fi
 }
 
 toggle_hidden_files() {
