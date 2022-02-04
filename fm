@@ -28,6 +28,16 @@ file_preview() {
 	esac
 }
 
+print_preview() {
+	let "preview_line_length = $(tput cols) - 100"
+	preview_text=$(file_preview $chosen_line | cut -c 1-$preview_line_length)
+	for ((i = 0; i < $maximum_lines; ++i)); do
+		tput cup $i 100
+		tput el
+		echo $preview_text | sed "${i}q;d"
+	done
+}
+
 update_position() {
 	let "current_line = $1"
 	if [ $current_line -gt $number_of_lines ]; then
@@ -70,26 +80,14 @@ move_line() {
 	tput cup $actual_line
 	echo $chosen_line | cut -c 1-$(tput cols)
 
-	if [ "$show_previews" = 1 ]; then
-		for ((i = 0; i < $maximum_lines; ++i)); do
-			tput cup $i 100
-			tput el
-		done
-	fi
-
 	update_position $1
 	tput rev
 	tput cup $actual_line
 	echo $chosen_line | cut -c 1-$(tput cols)
 
 	tput sgr0
-	preview_text=$(file_preview $chosen_line)
 	if [ "$show_previews" = 1 ]; then
-		for ((i = 0; i < $(echo $preview_text | sed -n "1,${maximum_lines}p" | wc -l); ++i)); do
-			tput cup $i 100
-			let "preview_line_length = $(tput cols) - 100"
-			echo $preview_text | sed "${i}q;d" | cut -c 1-$preview_line_length
-		done
+		print_preview
 	fi
 
 	tput cup $(tput lines)
