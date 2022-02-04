@@ -90,11 +90,7 @@ draw_screen() {
 	let "last_line_to_output = $first_line_to_output + $maximum_lines - 1"
 	echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$(tput cols)
 
-	if [ $1 ]; then
-		let "current_line = $1"
-	else
-		let "current_line = 1"
-	fi
+	current_line=${1:=1}
 
 	move_line $current_line
 }
