@@ -34,7 +34,7 @@ file_preview() {
 
 print_preview() {
 	let "preview_line_length = $(tput cols) - 100"
-	preview_text=$(file_preview $chosen_line | cut -c 1-$preview_line_length)
+	preview_text=$(file_preview $1 | cut -c 1-$preview_line_length)
 	for ((i = 0; i < $maximum_lines; ++i)); do
 		tput cup $i 100
 		tput el
@@ -91,7 +91,7 @@ move_line() {
 
 	tput sgr0
 	if [ "$show_previews" = 1 ]; then
-		print_preview
+		print_preview $chosen_line
 	fi
 
 	tput cup $(tput lines)
