@@ -17,7 +17,11 @@ go_to() {
 file_preview() {
 	case $(file $1) in
 		*directory*)
-			ls -la $1
+			if [ "$show_hidden" = 1 ]; then
+				ls -lA $1
+			else
+				ls -l $1
+			fi
 			;;
 		*text*)
 			cat $1
