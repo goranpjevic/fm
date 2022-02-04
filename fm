@@ -90,7 +90,7 @@ move_line() {
 	echo $chosen_line | cut -c 1-$(tput cols)
 
 	tput sgr0
-	if [ "$show_previews" = 1 ]; then
+	if [ "$enable_preview" = 1 ] && [ "$show_previews" = 1 ]; then
 		print_preview $chosen_line
 	fi
 
@@ -314,6 +314,7 @@ fm() {
 
 	tput smcup
 	let "show_hidden = 0"
+	let "enable_preview = 0"
 	trap 'draw_screen' SIGWINCH
 	trap 'quit $2' SIGINT
 	read_keys $(pwd) $2
