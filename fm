@@ -27,7 +27,7 @@ file_preview() {
 			cat $1
 			;;
 		*)
-			file $1
+			file --brief $1
 			;;
 	esac
 }
