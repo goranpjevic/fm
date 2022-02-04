@@ -14,6 +14,20 @@ go_to() {
 	esac
 }
 
+file_preview() {
+	case $(file $1) in
+		*directory*)
+			ls -la $1
+			;;
+		*text*)
+			cat $1
+			;;
+		*)
+			file $1
+			;;
+	esac
+}
+
 update_position() {
 	let "current_line = $1"
 	if [ $current_line -gt $number_of_lines ]; then
@@ -56,12 +70,28 @@ move_line() {
 	tput cup $actual_line
 	echo $chosen_line | cut -c 1-$(tput cols)
 
+	if [ "$show_previews" = 1 ]; then
+		for ((i = 0; i < $maximum_lines; ++i)); do
+			tput cup $i 100
+			tput el
+		done
+	fi
+
 	update_position $1
 	tput rev
 	tput cup $actual_line
 	echo $chosen_line | cut -c 1-$(tput cols)
 
 	tput sgr0
+	preview_text=$(file_preview $chosen_line)
+	if [ "$show_previews" = 1 ]; then
+		for ((i = 0; i < $(echo $preview_text | sed -n "1,${maximum_lines}p" | wc -l); ++i)); do
+			tput cup $i 100
+			let "preview_line_length = $(tput cols) - 100"
+			echo $preview_text | sed "${i}q;d" | cut -c 1-$preview_line_length
+		done
+	fi
+
 	tput cup $(tput lines)
 	tput el
 	echo -n $(ls -ld $chosen_line | cut -c 1-$(tput cols))
@@ -71,6 +101,13 @@ move_line() {
 draw_screen() {
 	tput clear
 	tput civis
+
+	let "show_previews = 0"
+	let "maximum_content_line_width = $(tput cols)"
+	if [ "$(tput cols)" -gt 150 ]; then
+		let "show_previews = 1"
+		let "maximum_content_line_width = 100"
+	fi
 
 	if [ "$show_hidden" = 1 ]; then
 		output=$(ls -A)
@@ -88,7 +125,7 @@ draw_screen() {
 		let "first_line_to_output = 1"
 	fi
 	let "last_line_to_output = $first_line_to_output + $maximum_lines - 1"
-	echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$(tput cols)
+	echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$maximum_content_line_width
 
 	current_line=${1:=1}
 
