@@ -41,5 +41,6 @@ usage:
   n - next match
   N - previous match
   e/^k - use a fuzzy finder
+  r - toggle preview
   : - execute shell command
   q/'^c' - quit fm
