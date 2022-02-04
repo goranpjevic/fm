@@ -157,35 +157,30 @@ toggle_hidden_files() {
 	fi
 }
 
-search_forward() {
-	lines_down=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "1p")
-	lines_from_top=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "1p")
-
-	if [ $lines_down ]; then
-		let "line_to_move_to = $current_line + $lines_down"
-		move_line $line_to_move_to
-	elif [ $lines_from_top ]; then
-		move_line $lines_from_top
-	fi
-}
-
-search_backward() {
-	lines_up=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "\$p")
-	lines_from_bottom=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "\$p")
-
-	if [ $lines_up ]; then
-		move_line $lines_up
-	elif [ $lines_from_bottom ]; then
-		let "line_to_move_to = $current_line + $lines_from_bottom"
-		move_line $line_to_move_to
-	fi
-}
-
 next() {
 	if [ "$search_direction" = 1 ]; then
-		search_forward
+		match_to_take="1"
 	else
-		search_backward
+		match_to_take="\$"
+	fi
+
+	down_next_match=
+	up_next_match=
+	down_next_match=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "${match_to_take}p")
+	up_next_match=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "${match_to_take}p")
+
+	if [ "$search_direction" = 1 ]; then
+		if [ $down_next_match ]; then
+			move_line "$current_line + $down_next_match"
+		elif [ $up_next_match ]; then
+			move_line $up_next_match
+		fi
+	else
+		if [ $up_next_match ]; then
+			move_line $up_next_match
+		elif [ $down_next_match ]; then
+			move_line "$current_line + $down_next_match"
+		fi
 	fi
 }
 
