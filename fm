@@ -50,20 +50,6 @@ update_position() {
 		let "current_line = 1"
 	fi
 
-	let "previous_line_number = $current_line - 1"
-	let "next_line_number = $current_line + 1"
-
-	if [ "$previous_line_number" = 0 ]; then
-		lines_above=""
-	else
-		lines_above=$(echo $output | sed -n "1,${previous_line_number}p")
-	fi
-	if [ $next_line_number = $number_of_lines ]; then
-		lines_below=""
-	else
-		lines_below=$(echo $output | sed -n "${next_line_number},\$p")
-	fi
-
 	chosen_line=$(echo $output | sed "${current_line}q;d")
 
 	if [ $current_line -gt $last_line_to_output ]; then
@@ -158,29 +144,16 @@ toggle_hidden_files() {
 }
 
 next() {
-	if [ "$search_direction" = 1 ]; then
-		match_to_take="1"
-	else
-		match_to_take="\$"
+	all_matches=$(echo $output | sed -ne "/${pattern}/I=")
+	below_matches=$(echo $all_matches | awk "{if(\$1>${current_line})print}")
+	above_matches=$(echo $all_matches | awk "{if(\$1<${current_line})print}")
+	sorted_matches="${below_matches}\n${above_matches}"
+	if [ "$search_direction" = 0 ]; then
+		sorted_matches=$(echo $sorted_matches | tail -r)
 	fi
-
-	down_next_match=
-	up_next_match=
-	down_next_match=$(echo $lines_below | sed -ne "/${pattern}/I=" | sed -n "${match_to_take}p")
-	up_next_match=$(echo $lines_above | sed -ne "/${pattern}/I=" | sed -n "${match_to_take}p")
-
-	if [ "$search_direction" = 1 ]; then
-		if [ $down_next_match ]; then
-			move_line "$current_line + $down_next_match"
-		elif [ $up_next_match ]; then
-			move_line $up_next_match
-		fi
-	else
-		if [ $up_next_match ]; then
-			move_line $up_next_match
-		elif [ $down_next_match ]; then
-			move_line "$current_line + $down_next_match"
-		fi
+	line_to_move_to=$(echo $sorted_matches | sed "/^\s*$/d" | sed -n "1p")
+	if [ $line_to_move_to ]; then
+		move_line $line_to_move_to
 	fi
 }
 
