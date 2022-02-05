@@ -24,7 +24,7 @@ file_preview() {
 			fi
 			;;
 		*text*)
-			cat $1
+			cat $1 | expand
 			;;
 		*)
 			file --brief $1
