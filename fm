@@ -3,6 +3,7 @@
 go_to() {
 	case $(file --brief $1) in
 		*directory*)
+			show_selected_files=0
 			cd $1
 			;;
 		*text*)
@@ -77,9 +78,19 @@ move_line() {
 			print_preview $chosen_line
 		fi
 
+		if [ $(echo $chosen_line | sed -n "/\//p") ]; then
+			selected_file=$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
+		else
+			selected_file=$(echo "$(pwd)""/""$chosen_line" | sed -e 's/[]\/$*.^[]/\\&/g')
+		fi
+		if [ $(echo $selected_lines | sed -n "/${selected_file}/=") ]; then
+			tput rev
+		fi
+
 		tput cup $(tput lines)
 		tput el
 		echo -n $(ls -ld $chosen_line | cut -c 1-$(tput cols))
+		tput sgr0
 	fi
 }
 
@@ -102,8 +113,16 @@ draw_screen() {
 		output=$(ls)
 	fi
 
+	if [ "${show_selected_files:=0}" = 1 ]; then
+		output=$selected_lines
+	fi
+
 	tput bold
-	echo $(pwd) | cut -c 1-$(tput cols)
+	if [ "$show_selected_files" = 0 ]; then
+		echo $(pwd) | cut -c 1-$(tput cols)
+	else
+		echo "number of files selected:" $(echo $selected_lines | wc -l) "  " "action:" $selection_option
+	fi
 	tput sgr0
 
 	let "maximum_lines = $(tput lines) - 2"
@@ -117,15 +136,17 @@ draw_screen() {
 }
 
 go_to_parent_directory() {
-	current_directory_name=${PWD##*/}
-	if [ $current_directory_name ]; then
-		go_to '..'
-		if [ "$show_hidden" = 1 ]; then
-			line_to_move_to=$(ls -A | sed -ne "/^${current_directory_name}\$/=")
-		else
-			line_to_move_to=$(ls | sed -ne "/^${current_directory_name}\$/=")
+	if [ "$show_selected_files" = 0 ]; then
+		current_directory_name=${PWD##*/}
+		if [ $current_directory_name ]; then
+			go_to '..'
+			if [ "$show_hidden" = 1 ]; then
+				line_to_move_to=$(ls -A | sed -ne "/^${current_directory_name}\$/=")
+			else
+				line_to_move_to=$(ls | sed -ne "/^${current_directory_name}\$/=")
+			fi
+			draw_screen $line_to_move_to
 		fi
-		draw_screen $line_to_move_to
 	fi
 }
 
@@ -171,6 +192,39 @@ search() {
 	read pattern
 	next
 	draw_screen $current_line
+}
+
+select_file() {
+	if [ $(echo $1 | sed -n "/\//p") ]; then
+		file_to_select=$1
+	else
+		file_to_select=$(echo "$(pwd)""/""$1")
+	fi
+	if [ "$(echo $selected_lines | sed -n "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/=")" ]; then
+		selected_lines=$(echo $selected_lines | sed "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/d")
+	else
+		selected_lines=$(echo "$selected_lines""\n""$file_to_select" | sed "/^\s*$/d")
+	fi
+	move_line $current_line
+}
+
+paste_selected_files() {
+	if [ "$selection_option" = "move" ]; then
+		selection_action="mv"
+	elif [ "$selection_option" = "copy" ]; then
+		selection_action="cp"
+	else
+		return
+	fi
+
+	selected_lines_array=(${(f)selected_lines})
+	for one_selected_line in $selected_lines_array; do
+		$selection_action $one_selected_line .
+	done
+
+	selected_lines=
+	selection_option=
+	draw_screen
 }
 
 shell_command() {
@@ -264,6 +318,24 @@ read_keys() {
 			'r')
 				((enable_preview ^= 1))
 				draw_screen $current_line
+				;;
+			's')
+				select_file $chosen_line
+				;;
+			't')
+				((show_selected_files ^= 1))
+				draw_screen
+				;;
+			'd')
+				selection_option="move"
+				draw_screen $current_line
+				;;
+			'y')
+				selection_option="copy"
+				draw_screen $current_line
+				;;
+			'p')
+				paste_selected_files
 				;;
 			':')
 				shell_command
