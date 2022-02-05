@@ -108,10 +108,7 @@ draw_screen() {
 
 	let "maximum_lines = $(tput lines) - 2"
 	let "number_of_lines=$(echo $output | wc -l)"
-	if [ -z $first_line_to_output ]; then
-		let "first_line_to_output = 1"
-	fi
-	let "last_line_to_output = $first_line_to_output + $maximum_lines - 1"
+	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$maximum_content_line_width
 
 	current_line=${1:=1}
