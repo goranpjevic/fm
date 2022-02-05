@@ -44,11 +44,6 @@ print_preview() {
 
 update_position() {
 	let "current_line = $1"
-	if [ $current_line -gt $number_of_lines ]; then
-		let "current_line = $number_of_lines"
-	elif [ $current_line -lt 1 ]; then
-		let "current_line = 1"
-	fi
 
 	chosen_line=$(echo $output | sed "${current_line}q;d")
 
@@ -66,23 +61,26 @@ update_position() {
 }
 
 move_line() {
-	update_position $current_line
-	tput cup $actual_line
-	echo $chosen_line | cut -c 1-$(tput cols)
+	let "line_to_move_to = $1"
+	if [ ! "$line_to_move_to" -gt "$number_of_lines" ] && [ ! "$line_to_move_to" -lt "1" ]; then
+		update_position $current_line
+		tput cup $actual_line
+		echo $chosen_line | cut -c 1-$(tput cols)
 
-	update_position $1
-	tput rev
-	tput cup $actual_line
-	echo $chosen_line | cut -c 1-$(tput cols)
+		update_position $1
+		tput rev
+		tput cup $actual_line
+		echo $chosen_line | cut -c 1-$(tput cols)
 
-	tput sgr0
-	if [ "$enable_preview" = 1 ] && [ "$show_previews" = 1 ]; then
-		print_preview $chosen_line
+		tput sgr0
+		if [ "$enable_preview" = 1 ] && [ "$show_previews" = 1 ]; then
+			print_preview $chosen_line
+		fi
+
+		tput cup $(tput lines)
+		tput el
+		echo -n $(ls -ld $chosen_line | cut -c 1-$(tput cols))
 	fi
-
-	tput cup $(tput lines)
-	tput el
-	echo -n $(ls -ld $chosen_line | cut -c 1-$(tput cols))
 }
 
 
