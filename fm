@@ -140,11 +140,11 @@ toggle_hidden_files() {
 }
 
 next() {
-	all_matches=$(echo $output | sed -ne "/${pattern}/I=")
+	all_matches=$(echo $output | sed -ne "/${pattern:=.}/I=")
 	below_matches=$(echo $all_matches | awk "\$1>${current_line}{print}")
 	above_matches=$(echo $all_matches | awk "\$1<${current_line}{print}")
 	sorted_matches="${below_matches}\n${above_matches}"
-	if [ "$search_direction" = 0 ]; then
+	if [ "${search_direction:=1}" = 0 ]; then
 		sorted_matches=$(echo $sorted_matches | tail -r)
 	fi
 	line_to_move_to=$(echo $sorted_matches | sed "/^\s*$/d" | sed -n "1p")
