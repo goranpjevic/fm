@@ -88,11 +88,12 @@ draw_screen() {
 	tput clear
 	tput civis
 
-	let "show_previews = 0"
-	let "maximum_content_line_width = $(tput cols)"
 	if [ "$(tput cols)" -gt 150 ]; then
 		let "show_previews = 1"
 		let "maximum_content_line_width = 100"
+	else
+		let "show_previews = 0"
+		let "maximum_content_line_width = $(tput cols)"
 	fi
 
 	if [ "$show_hidden" = 1 ]; then
