@@ -218,7 +218,7 @@ read_keys() {
 				move_line "$current_line - 1"
 				;;
 			'g')
-				move_line 0
+				move_line 1
 				;;
 			'G')
 				move_line $number_of_lines
