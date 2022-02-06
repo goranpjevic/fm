@@ -36,15 +36,9 @@ file_preview() {
 print_preview() {
 	let "preview_line_length = $(tput cols) - 100"
 
-	empty_preview=
-	for ((i = 0; i < $maximum_lines; ++i)); do
-		empty_preview+=$(printf "%+${preview_line_length}s")
-		empty_preview+="\n"
-	done
-
-	preview_text=$(echo $empty_preview | cut -c 1-$preview_line_length)
+	empty_preview=$(printf "$(printf ' %.0s' {1..$preview_line_length})\n%.0s" {1..$maximum_lines})
 	tput cup 1 100
-	echo $preview_text | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}' | sed -n "1,${maximum_lines}p"
+	echo $empty_preview | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}'
 
 	preview_text=$(file_preview $1 | cut -c 1-$preview_line_length)
 	tput cup 1 100
