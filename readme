@@ -42,7 +42,7 @@ usage:
   N - previous match
   e/^k - use a fuzzy finder
   r - toggle preview
-  s - select current file
+  s/'space' - select current file
   t - toggle displaying selected files
   d - set selection action to move
   y - set selection action to copy
