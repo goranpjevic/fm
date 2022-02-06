@@ -122,7 +122,7 @@ draw_screen() {
 	if [ "$show_selected_files" = 0 ]; then
 		echo $(pwd) | cut -c 1-$(tput cols)
 	else
-		echo "number of files selected:" $(echo $selected_lines | wc -l) "  " "action:" $selection_option
+		echo "number of files selected:" $(echo $selected_lines | wc -l) "  " "action:" $selection_option | cut -c 1-$(tput cols)
 	fi
 	tput sgr0
 
