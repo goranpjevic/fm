@@ -38,11 +38,11 @@ print_preview() {
 
 	empty_preview=$(printf "$(printf ' %.0s' {1..$preview_line_length})\n%.0s" {1..$maximum_lines})
 	tput cup 1 100
-	echo $empty_preview | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}'
+	printf %s "$empty_preview" | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}'
 
 	preview_text=$(file_preview $1 | cut -c 1-$preview_line_length | sed -n "1,${maximum_lines}p")
 	tput cup 1 100
-	echo $preview_text | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}'
+	printf %s "$preview_text" | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}'
 }
 
 update_position() {
