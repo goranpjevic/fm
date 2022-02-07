@@ -34,15 +34,13 @@ file_preview() {
 }
 
 print_preview() {
-	let "preview_line_length = $(tput cols) - 100"
+	empty_preview=$(printf "$(printf ' %.0s' {1..$maximum_line_width})\n%.0s" {1..$maximum_lines})
+	tput cup 1 $maximum_line_width
+	printf %s "$empty_preview" | PREFIX=$(tput cr; tput cuf $maximum_line_width) awk '{print ENVIRON["PREFIX"] $0}'
 
-	empty_preview=$(printf "$(printf ' %.0s' {1..$preview_line_length})\n%.0s" {1..$maximum_lines})
-	tput cup 1 100
-	printf %s "$empty_preview" | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}'
-
-	preview_text=$(file_preview $1 | cut -c 1-$preview_line_length | sed -n "1,${maximum_lines}p")
-	tput cup 1 100
-	printf %s "$preview_text" | PREFIX=$(tput cr; tput cuf 100) awk '{print ENVIRON["PREFIX"] $0}'
+	preview_text=$(file_preview $1 | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p")
+	tput cup 1 $maximum_line_width
+	printf %s "$preview_text" | PREFIX=$(tput cr; tput cuf $maximum_line_width) awk '{print ENVIRON["PREFIX"] $0}'
 }
 
 update_position() {
@@ -76,9 +74,7 @@ move_line() {
 		echo $chosen_line | cut -c 1-$(tput cols)
 
 		tput sgr0
-		if [ "$enable_preview" = 1 ] && [ "$show_previews" = 1 ]; then
-			print_preview $chosen_line
-		fi
+		print_preview $chosen_line
 
 		if [ "$show_selected_files" = 1 ]; then
 			selected_file=$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
@@ -101,14 +97,6 @@ move_line() {
 draw_screen() {
 	tput clear
 	tput civis
-
-	if [ "$(tput cols)" -gt 150 ]; then
-		let "show_previews = 1"
-		let "maximum_content_line_width = 100"
-	else
-		let "show_previews = 0"
-		let "maximum_content_line_width = $(tput cols)"
-	fi
 
 	if [ "$show_hidden" = 1 ]; then
 		output=$(ls -A)
@@ -141,8 +129,10 @@ draw_screen() {
 	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	current_line=${1:=1}
 
+	let "maximum_line_width = $(tput cols) / 2"
+
 	if [ $output ]; then
-		echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$maximum_content_line_width
+		echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$maximum_line_width
 		move_line $current_line
 	fi
 }
@@ -332,10 +322,6 @@ read_keys() {
 				fuzzy_find
 				draw_screen
 				;;
-			'r')
-				((enable_preview ^= 1))
-				draw_screen $current_line
-				;;
 			's'|' ')
 				select_file $chosen_line
 				;;
@@ -371,7 +357,6 @@ fm() {
 
 	tput smcup
 	let "show_hidden = 0"
-	let "enable_preview = 1"
 	trap 'draw_screen' SIGWINCH
 	trap 'quit $2' SIGINT
 	read_keys $(pwd) $2
