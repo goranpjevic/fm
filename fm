@@ -147,7 +147,11 @@ go_to_parent_directory() {
 			else
 				line_to_move_to=$(ls | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
 			fi
-			draw_screen $line_to_move_to
+			if [ "$line_to_move_to" = 0 ]; then
+				draw_screen
+			else
+				draw_screen $line_to_move_to
+			fi
 		fi
 	fi
 }
