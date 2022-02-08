@@ -59,7 +59,7 @@ update_position() {
 
 move_line() {
 	let "line_to_move_to = $1"
-	if [ ! "$line_to_move_to" -gt "$number_of_lines" ] && [ ! "$line_to_move_to" -lt "1" ]; then
+	if [ "$line_to_move_to" -le "$number_of_lines" ] && [ "$line_to_move_to" -ge "1" ]; then
 		update_position $current_line
 		tput cup $actual_line
 		echo $chosen_line | cut -c 1-$(tput cols)
