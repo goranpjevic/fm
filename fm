@@ -94,16 +94,14 @@ draw_screen() {
 	tput clear
 	tput civis
 
+	tput bold
 	if [ "${show_selected_files:=0}" = 0 ]; then
 		output=$(file_preview $(pwd))
-	else
-		output=$selected_lines
-	fi
 
-	tput bold
-	if [ "$show_selected_files" = 0 ]; then
 		echo $(pwd) | cut -c 1-$(tput cols)
 	else
+		output=$selected_lines
+
 		top_line="number of files selected: "
 		if [ $selected_lines ]; then
 			top_line+=$(echo $selected_lines | wc -l | sed 's/ //g')
