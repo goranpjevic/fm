@@ -18,11 +18,7 @@ go_to() {
 file_preview() {
 	case $(file $1) in
 		*directory*)
-			if [ "$show_hidden" = 1 ]; then
-				ls -A $1 2>/dev/null
-			else
-				ls $1 2>/dev/null
-			fi
+			ls $([ "$show_hidden" = 1 ] && echo "-A") $1 2>/dev/null
 			;;
 		*text*)
 			cat $1 | expand
