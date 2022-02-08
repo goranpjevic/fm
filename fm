@@ -342,7 +342,6 @@ read_keys() {
 				;;
 			'q')
 				quit $2
-				return
 				;;
 		esac
 	done
