@@ -16,7 +16,7 @@ go_to() {
 }
 
 file_preview() {
-	case $(file $1) in
+	case $(file --brief $1) in
 		*directory*)
 			ls $([ "${show_hidden:=0}" = 1 ] && echo "-A") $1 2>/dev/null
 			;;
