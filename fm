@@ -19,9 +19,9 @@ file_preview() {
 	case $(file $1) in
 		*directory*)
 			if [ "$show_hidden" = 1 ]; then
-				ls -lA $1 2>/dev/null
+				ls -A $1 2>/dev/null
 			else
-				ls -l $1 2>/dev/null
+				ls $1 2>/dev/null
 			fi
 			;;
 		*text*)
@@ -98,13 +98,9 @@ draw_screen() {
 	tput clear
 	tput civis
 
-	if [ "$show_hidden" = 1 ]; then
-		output=$(ls -A)
+	if [ "${show_selected_files:=0}" = 0 ]; then
+		output=$(file_preview $(pwd))
 	else
-		output=$(ls)
-	fi
-
-	if [ "${show_selected_files:=0}" = 1 ]; then
 		output=$selected_lines
 	fi
 
@@ -142,11 +138,7 @@ go_to_parent_directory() {
 		current_directory_name=${PWD##*/}
 		if [ $current_directory_name ]; then
 			go_to '..'
-			if [ "$show_hidden" = 1 ]; then
-				line_to_move_to=$(ls -A | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
-			else
-				line_to_move_to=$(ls | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
-			fi
+			line_to_move_to=$(file_preview $(pwd) | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
 			if [ "$line_to_move_to" = 0 ]; then
 				draw_screen
 			else
