@@ -128,16 +128,14 @@ draw_screen() {
 }
 
 go_to_parent_directory() {
-	if [ "$show_selected_files" = 0 ]; then
-		current_directory_name=${PWD##*/}
-		if [ $current_directory_name ]; then
-			go_to '..'
-			line_to_move_to=$(file_preview $(pwd) | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
-			if [ "$line_to_move_to" = 0 ]; then
-				draw_screen
-			else
-				draw_screen $line_to_move_to
-			fi
+	current_directory_name=${PWD##*/}
+	if [ "$show_selected_files" = 0 ] && [ $current_directory_name ]; then
+		go_to '..'
+		line_to_move_to=$(file_preview $(pwd) | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
+		if [ "$line_to_move_to" = 0 ]; then
+			draw_screen
+		else
+			draw_screen $line_to_move_to
 		fi
 	fi
 }
