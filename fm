@@ -147,11 +147,8 @@ go_to_parent_directory() {
 toggle_hidden_files() {
 	((show_hidden ^= 1))
 	selected_line=$chosen_line
-	draw_screen
-	line_to_move_to=$(echo $output | sed -ne "/^${selected_line}\$/=")
-	if [ $line_to_move_to ]; then
-		move_line $line_to_move_to
-	fi
+	line_to_move_to=$(file_preview $(pwd) | sed -ne "/^${selected_line}\$/=")
+	draw_screen $([ "$line_to_move_to" -gt 0 ] && echo $line_to_move_to)
 }
 
 next() {
