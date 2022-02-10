@@ -72,8 +72,8 @@ move_line() {
 		tput sgr0
 		print_preview $chosen_line
 
-		selected_file=$(echo $([ "$show_selected_files" = 1 ] && echo $(pwd)"/")$chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
-		
+		selected_file=$(echo $([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
+
 		is_selected_line_selected=$(echo $selected_lines | sed -n "/${selected_file}/=")
 		if [ $is_selected_line_selected ]; then
 			tput rev
