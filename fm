@@ -178,11 +178,7 @@ search() {
 
 select_file() {
 	if [ $output ]; then
-		if [ "$show_selected_files" = 1 ]; then
-			file_to_select=$1
-		else
-			file_to_select=$(echo "$(pwd)""/""$1")
-		fi
+		file_to_select=$([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$1
 		if [ "$(echo $selected_lines | sed -n "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/=")" ]; then
 			selected_lines=$(echo $selected_lines | sed "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/d")
 		else
