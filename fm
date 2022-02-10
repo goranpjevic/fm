@@ -177,17 +177,19 @@ search() {
 }
 
 select_file() {
-	if [ "$show_selected_files" = 1 ]; then
-		file_to_select=$1
-	else
-		file_to_select=$(echo "$(pwd)""/""$1")
+	if [ $output ]; then
+		if [ "$show_selected_files" = 1 ]; then
+			file_to_select=$1
+		else
+			file_to_select=$(echo "$(pwd)""/""$1")
+		fi
+		if [ "$(echo $selected_lines | sed -n "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/=")" ]; then
+			selected_lines=$(echo $selected_lines | sed "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/d")
+		else
+			selected_lines=$(echo "$selected_lines""\n""$file_to_select" | sed "/^\s*$/d")
+		fi
+		move_line $current_line
 	fi
-	if [ "$(echo $selected_lines | sed -n "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/=")" ]; then
-		selected_lines=$(echo $selected_lines | sed "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/d")
-	else
-		selected_lines=$(echo "$selected_lines""\n""$file_to_select" | sed "/^\s*$/d")
-	fi
-	move_line $current_line
 }
 
 paste_selected_files() {
