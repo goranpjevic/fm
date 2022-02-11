@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 go_to() {
 	case $(file --brief $1) in
