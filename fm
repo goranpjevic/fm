@@ -192,7 +192,7 @@ copy_or_move() {
 	read -sq answer
 	if [ $answer = "y" ]; then
 		selected_lines_array=(${(f)selected_lines})
-		selection_action=$([ $1 = "copy" ] && echo "cp -r" || echo "mv")
+		selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
 		for one_selected_line in $selected_lines_array; do
 			eval $selection_action '"'$one_selected_line'"' .
 		done
