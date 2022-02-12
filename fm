@@ -103,8 +103,6 @@ draw_screen() {
 		else
 			top_line+="0"
 		fi
-		top_line+="  action:"
-		top_line+=$selection_option
 		echo $top_line | cut -c 1-$(tput cols)
 	fi
 	tput sgr0
@@ -188,24 +186,21 @@ select_file() {
 	fi
 }
 
-paste_selected_files() {
-	if [ "$selection_option" = "move" ]; then
-		selection_action="mv"
-	elif [ "$selection_option" = "copy" ]; then
-		selection_action="cp -R"
-	else
-		return
+copy_or_move() {
+	tput cup $(tput lines)
+	echo -n "are you sure you want to $1 all selected files? [y/N]"
+	read -sq answer
+	if [ $answer = "y" ]; then
+		selected_lines_array=(${(f)selected_lines})
+		selection_action=$([ $1 = "copy" ] && echo "cp -r" || echo "mv")
+		for one_selected_line in $selected_lines_array; do
+			eval $selection_action '"'$one_selected_line'"' .
+		done
+		selected_lines=
 	fi
-
-	selected_lines_array=(${(f)selected_lines})
-	for one_selected_line in $selected_lines_array; do
-		eval $selection_action '"'$one_selected_line'"' .
-	done
-
-	selected_lines=
-	selection_option=
 	draw_screen
 }
+
 
 shell_command() {
 	tput cup $(tput lines)
@@ -305,16 +300,11 @@ read_keys() {
 				((show_selected_files ^= 1))
 				draw_screen
 				;;
-			'd')
-				selection_option="move"
-				draw_screen $current_line
+			'c')
+				copy_or_move "copy"
 				;;
-			'y')
-				selection_option="copy"
-				draw_screen $current_line
-				;;
-			'p')
-				paste_selected_files
+			'm')
+				copy_or_move "move"
 				;;
 			':')
 				shell_command

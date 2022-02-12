@@ -43,8 +43,7 @@ usage:
   e/^k - use a fuzzy finder
   s/'space' - select current file
   t - toggle displaying selected files
-  d - set selection action to move
-  y - set selection action to copy
-  p - delete or copy selected files
+  c - copy selected files to the current directory
+  m - move selected files to the current directory
   : - execute shell command
   q/'^c' - quit fm
