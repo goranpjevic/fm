@@ -73,7 +73,7 @@ move_line() {
 		print_preview $chosen_line
 
 		selected_file=$(echo $([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
-		if [ $(echo $selected_lines | sed -n "/${selected_file}/=") ]; then
+		if [ $(echo $selected_lines | sed -n "/^${selected_file}\$/=") ]; then
 			tput rev
 		fi
 
@@ -179,8 +179,8 @@ search() {
 select_file() {
 	if [ $output ]; then
 		file_to_select=$([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$1
-		if [ "$(echo $selected_lines | sed -n "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/=")" ]; then
-			selected_lines=$(echo $selected_lines | sed "/$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')/d")
+		if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')$/=")" ]; then
+			selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')$/d")
 		else
 			selected_lines=$(echo "$selected_lines""\n""$file_to_select" | sed "/^\s*$/d")
 		fi
