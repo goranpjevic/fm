@@ -199,7 +199,7 @@ paste_selected_files() {
 
 	selected_lines_array=(${(f)selected_lines})
 	for one_selected_line in $selected_lines_array; do
-		$selection_action $one_selected_line .
+		eval $selection_action '"'$one_selected_line'"' .
 	done
 
 	selected_lines=
