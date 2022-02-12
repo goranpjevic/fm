@@ -192,7 +192,7 @@ paste_selected_files() {
 	if [ "$selection_option" = "move" ]; then
 		selection_action="mv"
 	elif [ "$selection_option" = "copy" ]; then
-		selection_action="cp"
+		selection_action="cp -R"
 	else
 		return
 	fi
