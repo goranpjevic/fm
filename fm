@@ -9,6 +9,7 @@ go_to() {
 			;;
 		*text*)
 			vim $1
+			draw_screen $current_line
 			;;
 		*)
 			open $1
