@@ -176,19 +176,21 @@ select_file() {
 }
 
 copy_or_move() {
-	tput cup $(tput lines)
-	tput el
-	echo -n "are you sure you want to $1 all selected files? [y/N]"
-	read -sq answer
-	if [ $answer = "y" ]; then
-		selected_lines_array=(${(f)selected_lines})
-		selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
-		for one_selected_line in $selected_lines_array; do
-			eval $selection_action '"'$one_selected_line'"' .
-		done
-		selected_lines=
+	if [ $selected_lines ] && [ "$show_selected_files" = 0 ]; then
+		tput cup $(tput lines)
+		tput el
+		echo -n "are you sure you want to $1 all selected files? [y/N]"
+		read -sq answer
+		if [ $answer = "y" ]; then
+			selected_lines_array=(${(f)selected_lines})
+			selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
+			for one_selected_line in $selected_lines_array; do
+				eval $selection_action '"'$one_selected_line'"' .
+			done
+			selected_lines=
+		fi
+		draw_screen
 	fi
-	draw_screen
 }
 
 shell_command() {
