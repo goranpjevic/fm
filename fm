@@ -85,7 +85,6 @@ move_line() {
 	fi
 }
 
-
 draw_screen() {
 	tput clear
 	tput civis
@@ -196,7 +195,6 @@ copy_or_move() {
 	fi
 	draw_screen
 }
-
 
 shell_command() {
 	tput cup $(tput lines)
