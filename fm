@@ -209,6 +209,7 @@ shell_command() {
 
 fuzzy_find() {
 	go_to $(fzf --preview 'case $(file {}) in *directory*) ls -la {} ;; *text*) cat {} ;; *) file {} ;; esac')
+	draw_screen
 }
 
 quit() {
@@ -282,7 +283,6 @@ read_keys() {
 				;;
 			'e'|$(printf '\ub'))
 				fuzzy_find
-				draw_screen
 				;;
 			's'|' ')
 				select_file $chosen_line
