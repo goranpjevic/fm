@@ -177,6 +177,7 @@ select_file() {
 
 copy_or_move() {
 	tput cup $(tput lines)
+	tput el
 	echo -n "are you sure you want to $1 all selected files? [y/N]"
 	read -sq answer
 	if [ $answer = "y" ]; then
