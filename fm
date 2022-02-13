@@ -98,13 +98,7 @@ draw_screen() {
 	else
 		output=$selected_lines
 
-		top_line="number of files selected: "
-		if [ $selected_lines ]; then
-			top_line+=$(echo $selected_lines | wc -l | sed 's/ //g')
-		else
-			top_line+="0"
-		fi
-		echo $top_line | cut -c 1-$(tput cols)
+		echo "number of files selected: $(echo -n $selected_lines | grep -c '^')" | cut -c 1-$(tput cols)
 	fi
 	tput sgr0
 
