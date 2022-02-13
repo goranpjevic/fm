@@ -205,6 +205,7 @@ shell_command() {
 	tput cnorm
 	read command_to_eval
 	eval $command_to_eval
+	draw_screen
 }
 
 fuzzy_find() {
@@ -297,7 +298,6 @@ read_keys() {
 				;;
 			':')
 				shell_command
-				draw_screen
 				;;
 			'q')
 				quit $2
