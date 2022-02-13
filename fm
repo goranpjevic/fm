@@ -253,8 +253,7 @@ read_keys() {
 				toggle_hidden_files
 				;;
 			'~'|$(printf '\u8'))
-				cd ~
-				draw_screen
+				go_to $HOME
 				;;
 			'f')
 				let "search_direction = 1"
@@ -308,12 +307,10 @@ read_keys() {
 }
 
 fm() {
-	cd ${1:=.}
-
 	tput smcup
 	trap 'draw_screen $current_line' SIGWINCH
 	trap 'quit $2' SIGINT
-	draw_screen
+	go_to ${1:=.}
 	read_keys $(pwd) $2
 }
 
