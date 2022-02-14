@@ -220,17 +220,17 @@ quit() {
 
 read_keys() {
 	while true; do
-		escape_char=$(printf "\u1b")
+		escape_char=$'\u1b'
 		read -sk1 key
 		if [ $key = $escape_char ]; then
 			read -sk2 key
 		fi
 
 		case $key in
-			'j'|'[B'|$(printf '\ue'))
+			'j'|'[B'|$'\ue')
 				move_line "$current_line + 1"
 				;;
-			'k'|'[A'|$(printf '\u10'))
+			'k'|'[A'|$'\u10')
 				move_line "$current_line - 1"
 				;;
 			'g')
@@ -239,16 +239,16 @@ read_keys() {
 			'G')
 				move_line $number_of_lines
 				;;
-			'l'|'[C'|$(printf '\u6'))
+			'l'|'[C'|$'\u6')
 				go_to $chosen_line
 				;;
-			'h'|'[D'|$(printf '\u2'))
+			'h'|'[D'|$'\u2')
 				go_to_parent_directory
 				;;
 			'z')
 				toggle_hidden_files
 				;;
-			'~'|$(printf '\u8'))
+			'~'|$'\u8')
 				go_to $HOME
 				;;
 			'f')
@@ -275,7 +275,7 @@ read_keys() {
 				next
 				((search_direction ^= 1))
 				;;
-			'e'|$(printf '\ub'))
+			'e'|$'\ub')
 				fuzzy_find
 				;;
 			's'|' ')
