@@ -198,7 +198,7 @@ shell_command() {
 	tput el
 	printf ":"
 	tput cnorm
-	read command_to_eval
+	read -r command_to_eval
 	eval $command_to_eval
 	draw_screen
 }
