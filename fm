@@ -204,7 +204,7 @@ shell_command() {
 }
 
 fuzzy_find() {
-	go_to $(fzf --preview 'case $(file {}) in *directory*) ls -la {} ;; *text*) cat {} ;; *) file {} ;; esac')
+	go_to "$(fzf --preview 'case $(file {}) in *directory*) ls -la {} ;; *text*) cat {} ;; *) file {} ;; esac')"
 	draw_screen
 }
 
