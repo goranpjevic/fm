@@ -118,7 +118,7 @@ draw_screen() {
 go_to_parent_directory() {
 	current_directory_name=${PWD##*/}
 	if [ "$show_selected_files" = 0 ] && [ $current_directory_name ]; then
-		go_to '..' $(file_preview $(dirname "$(pwd)") | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
+		go_to '..' $(file_preview "$(dirname "$(pwd)")" | sed -ne "/^$(echo $current_directory_name | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
 	fi
 }
 
