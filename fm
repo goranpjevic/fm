@@ -70,8 +70,8 @@ move_line() {
 		tput rev
 		tput cup $actual_line
 		echo $chosen_line | cut -c 1-$(tput cols)
-
 		tput sgr0
+
 		print_preview $chosen_line
 
 		selected_file=$(echo $([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
