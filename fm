@@ -87,6 +87,7 @@ move_line() {
 }
 
 draw_screen() {
+	stty -echo
 	tput clear
 	tput civis
 
@@ -150,6 +151,7 @@ find() {
 }
 
 search() {
+	stty sane
 	tput cup $(tput lines)
 	tput el
 	if [ "$search_direction" = 1 ]; then
@@ -194,6 +196,7 @@ copy_or_move() {
 }
 
 shell_command() {
+	stty sane
 	tput cup $(tput lines)
 	tput el
 	printf ":"
@@ -212,6 +215,7 @@ quit() {
 	tput clear
 	tput rmcup
 	tput cnorm
+	stty sane
 	if [ $1 ]; then
 		pwd >> $1
 	fi
