@@ -150,13 +150,17 @@ find() {
 	next
 }
 
-search() {
+user_input() {
 	stty sane
 	tput cup $(tput lines)
 	tput el
 	echo -n $key
 	tput cnorm
-	read pattern
+	read -r $1
+}
+
+search() {
+	user_input pattern
 	next
 	draw_screen $current_line
 }
@@ -192,12 +196,7 @@ copy_or_move() {
 }
 
 shell_command() {
-	stty sane
-	tput cup $(tput lines)
-	tput el
-	printf ":"
-	tput cnorm
-	read -r command_to_eval
+	user_input command_to_eval
 	eval $command_to_eval
 	draw_screen
 }
