@@ -154,11 +154,7 @@ search() {
 	stty sane
 	tput cup $(tput lines)
 	tput el
-	if [ "$search_direction" = 1 ]; then
-		printf "/"
-	else
-		printf "?"
-	fi
+	echo -n $key
 	tput cnorm
 	read pattern
 	next
