@@ -4,6 +4,7 @@ go_to() {
 	case $(file --brief $1) in
 		*directory*)
 			show_selected_files=0
+			first_line_to_output=1
 			cd $1
 			draw_screen $2
 			;;
