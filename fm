@@ -37,7 +37,7 @@ print_preview() {
 	tput cup 1 $maximum_line_width
 	printf %s "$empty_preview" | PREFIX=$(tput cr; tput cuf $maximum_line_width) awk '{print ENVIRON["PREFIX"] $0}'
 
-	preview_text=$(file_preview $1 | expand | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p")
+	preview_text=$(file_preview $1 | expand 2>/dev/null | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p")
 	tput cup 1 $maximum_line_width
 	printf %s "$preview_text" | PREFIX=$(tput cr; tput cuf $maximum_line_width) awk '{print ENVIRON["PREFIX"] $0}'
 }
