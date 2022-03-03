@@ -4,7 +4,7 @@ terminal file manager.
 
 notes:
 
-  - 'fm' only works in zsh.
+  - 'zsh' must be installed for 'fm' to work
 
   - all searches are case insensitive
 
@@ -12,8 +12,8 @@ installation:
 
   - add the 'fm' script to $PATH
 
-  - to cd to last open directory in fm, add the following to your '~/.zshrc'
-    file:
+  - to cd to last open directory in fm, add the following to your shell
+    configuration file (e.g. '~/.zshrc'):
 
       #start fm, and cd to last directory on exit
       f() {   
