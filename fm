@@ -147,7 +147,7 @@ next() {
 
 find() {
 	read -sk1 letter
-	pattern='^'$letter
+	pattern='^'$(echo $letter | sed -e 's/[]\/$*.^[]/\\&/g')
 	next
 }
 
