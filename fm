@@ -251,6 +251,14 @@ read_keys() {
 			'~'|$'\u8')
 				go_to $HOME
 				;;
+			'b')
+				bookmarked_directory="$(pwd)"
+				;;
+			"'")
+				if [ $bookmarked_directory ]; then
+					go_to "$bookmarked_directory"
+				fi
+				;;
 			'f')
 				let "search_direction = 1"
 				find
