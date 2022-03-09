@@ -48,4 +48,4 @@ usage:
   c - copy selected files to the current directory
   m - move selected files to the current directory
   : - execute shell command
-  q/'^c' - quit fm
+  q/^c - quit fm
