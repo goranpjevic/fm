@@ -44,7 +44,6 @@ print_preview() {
 
 update_position() {
 	let "current_line = $1"
-
 	chosen_line=$(echo $output | sed "${current_line}q;d")
 
 	if [ $current_line -gt $last_line_to_output ]; then
@@ -108,7 +107,6 @@ draw_screen() {
 	let "number_of_lines=$(echo $output | wc -l)"
 	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	current_line=${1:=1}
-
 	let "maximum_line_width = $(tput cols) / 2"
 
 	if [ $output ]; then
