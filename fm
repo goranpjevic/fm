@@ -104,10 +104,10 @@ draw_screen() {
 	tput sgr0
 
 	let "maximum_lines = $(tput lines) - 2"
+	let "maximum_line_width = $(tput cols) / 2"
 	let "number_of_lines=$(echo $output | wc -l)"
 	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	current_line=${1:=1}
-	let "maximum_line_width = $(tput cols) / 2"
 
 	if [ $output ]; then
 		echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$maximum_line_width
