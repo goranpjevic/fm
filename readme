@@ -34,8 +34,8 @@ usage:
   h/'left'/^b - go to the parent directory
   z - toggle hidden files
   ~/^h - cd to $HOME
-  b - bookmark current directory
-  ' - go to bookmarked directory
+  b - bookmark the current directory
+  ' - go to the bookmarked directory
   f - find line starting with a letter forward
   F - find line starting with a letter backward
   / - search pattern forward
