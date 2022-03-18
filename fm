@@ -180,7 +180,7 @@ copy_or_move() {
 	if [ $selected_lines ] && [ "$show_selected_files" = 0 ]; then
 		tput cup $(tput lines)
 		tput el
-		echo -n "are you sure you want to $1 all selected files? [y/N]"
+		echo -n "are you sure you want to $1 the selected files to the current directory? [y/N]"
 		read -sq answer
 		if [ $answer = "y" ]; then
 			selected_lines_array=(${(f)selected_lines})
