@@ -29,7 +29,7 @@ file_preview() {
 			cat $1
 			;;
 		*)
-			file --brief $1
+			file --dereference --brief $1
 			;;
 	esac
 }
