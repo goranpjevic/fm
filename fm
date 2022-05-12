@@ -26,7 +26,7 @@ file_preview() {
 			ls $([ "${show_hidden:=0}" = 1 ] && echo "-A") $1 2>/dev/null
 			;;
 		*text*)
-			cat $1
+			head -n $maximum_lines $1
 			;;
 		*)
 			file --dereference --brief $1
