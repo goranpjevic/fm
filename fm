@@ -310,7 +310,7 @@ read_keys() {
 	done
 }
 
-fm() {
+main() {
 	tput smcup
 	trap 'draw_screen $current_line' SIGWINCH
 	trap 'quit $2' SIGINT
@@ -318,4 +318,4 @@ fm() {
 	read_keys $2
 }
 
-fm $@
+main $@
