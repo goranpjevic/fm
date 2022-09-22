@@ -8,6 +8,9 @@ notes:
 
   - all searches are case insensitive
 
+  - when executing a shell command, use '$.' to reference the highlighted file
+    or directory, and '$%' to reference all the displayed files or directories
+
 installation:
 
   - add the 'fm' script to $PATH

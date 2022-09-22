@@ -206,7 +206,7 @@ copy_or_move() {
 
 shell_command() {
 	user_input command_to_eval
-	eval $command_to_eval
+	eval $command_to_eval:gs/$./$chosen_line/:gs/$%/$(echo $output | paste -sd ' ' -)
 	draw_screen
 }
 
