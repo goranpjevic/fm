@@ -20,7 +20,6 @@ installation:
 
       #start fm, and cd to last directory on exit
       f() {   
-              # store last directory in a temporary file
               tmp="$(mktemp)"
               fm ${1:=.} $tmp
               cd "$(cat "$tmp")"
