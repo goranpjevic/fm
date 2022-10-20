@@ -192,11 +192,15 @@ copy_or_move() {
 		tput el
 		echo -n "are you sure you want to $1 the selected files to the current directory? [y/N]"
 		read -sq answer
+		tput cup $(tput lines)
+		tput el
 		if [ $answer = "y" ]; then
+			tput cnorm
+			stty sane
 			selected_lines_array=(${(f)selected_lines})
 			selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
 			for one_selected_line in $selected_lines_array; do
-				eval $selection_action '"'$one_selected_line'"' .
+				eval $selection_action -i '"'$one_selected_line'"' .
 			done
 			selected_lines=
 		fi
