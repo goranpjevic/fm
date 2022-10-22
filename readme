@@ -38,6 +38,7 @@ usage:
   ~/^h - cd to $HOME
   b - bookmark the current directory
   ' - go to the bookmarked directory
+  " - go to the previous directory
   f - find line starting with a letter forward
   F - find line starting with a letter backward
   / - search pattern forward

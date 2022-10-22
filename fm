@@ -5,6 +5,7 @@ go_to() {
 		*directory*)
 			show_selected_files=0
 			first_line_to_output=1
+			previous_directory="$(pwd)"
 			cd $1
 			draw_screen $2
 			;;
@@ -272,6 +273,9 @@ read_keys() {
 				if [ $bookmarked_directory ]; then
 					go_to "$bookmarked_directory"
 				fi
+				;;
+			'"')
+				go_to "${previous_directory:="$(pwd)"}"
 				;;
 			'f')
 				let "search_direction = 1"
