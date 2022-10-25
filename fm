@@ -214,7 +214,13 @@ shell_command() {
 	one_line=$(echo $chosen_line | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/")
 	all_lines=$(echo $output | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -)
 	eval $command_to_eval:gs/$./$one_line/:gs/$%/$all_lines
-	draw_screen
+	number_of_files=$(file_preview '.' | wc -l)
+	if [ -e "$chosen_line" ]; then
+		current_line=$(file_preview '.' | sed -ne "/^$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
+	elif [ $number_of_files -lt $current_line ]; then
+		current_line=$number_of_files
+	fi
+	draw_screen $current_line
 }
 
 fuzzy_find() {
