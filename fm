@@ -274,7 +274,7 @@ read_keys() {
 				move_line $first_line_to_output
 				;;
 			'M')
-				move_line "($last_visible_line + $first_line_to_output) / 2"
+				move_line "($first_line_to_output + $last_visible_line) / 2"
 				;;
 			'L')
 				move_line $last_visible_line
