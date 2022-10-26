@@ -34,6 +34,9 @@ usage:
   G - move to the bottom
   l/'right'/^f - go to directory or open a file
   h/'left'/^b - go to the parent directory
+  H - move to the first line in the output
+  M - move to the middle line in the output
+  L - move to the last line in the output
   z - toggle hidden files
   ~/^h - cd to $HOME
   b - bookmark the current directory
