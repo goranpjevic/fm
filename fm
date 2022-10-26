@@ -222,11 +222,7 @@ shell_command() {
 	if [ -e "$chosen_line" ]; then
 		current_line=$(file_preview '.' | sed -ne "/^$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
 	elif [ $number_of_files -lt $current_line ]; then
-		if [ $number_of_files = 0 ]; then
-			current_line=1
-		else
-			current_line=$number_of_files
-		fi
+		current_line=$([ $number_of_files = 0 ] && echo 1 || echo $number_of_files)
 	fi
 	draw_screen $current_line
 }
