@@ -277,7 +277,7 @@ read_keys() {
 				move_line "($last_visible_line + $first_line_to_output) / 2"
 				;;
 			'L')
-				move_line "$last_visible_line"
+				move_line $last_visible_line
 				;;
 			'z')
 				toggle_hidden_files
