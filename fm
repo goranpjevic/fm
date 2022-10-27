@@ -235,9 +235,7 @@ quit() {
 	tput rmcup
 	tput cnorm
 	stty sane
-	if [ $1 ]; then
-		pwd >> $1
-	fi
+	[ $1 ] && pwd >> $1
 	exit
 }
 
