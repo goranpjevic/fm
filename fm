@@ -241,9 +241,8 @@ quit() {
 
 read_keys() {
 	while true; do
-		escape_char=$'\u1b'
 		read -sk1 key
-		if [ $key = $escape_char ]; then
+		if [ $key = $'\u1b' ]; then
 			read -sk2 key
 		fi
 
