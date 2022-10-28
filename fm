@@ -242,9 +242,7 @@ quit() {
 read_keys() {
 	while true; do
 		read -sk1 key
-		if [ $key = $'\u1b' ]; then
-			read -sk2 key
-		fi
+		[ $key = $'\u1b' ] && read -sk2 key
 
 		case $key in
 			'j'|'[B'|$'\ue')
