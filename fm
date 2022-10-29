@@ -85,9 +85,7 @@ move_line() {
 		print_preview $chosen_line
 
 		selected_file=$(echo $([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
-		if [ $(echo $selected_lines | sed -n "/^${selected_file}\$/=") ]; then
-			tput rev
-		fi
+		[ $(echo $selected_lines | sed -n "/^${selected_file}\$/=") ] && tput rev
 
 		tput cup $(tput lines)
 		tput el
