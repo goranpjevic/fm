@@ -142,9 +142,7 @@ next() {
 	below_matches=$(echo $all_matches | awk "\$1>${current_line}")
 	above_matches=$(echo $all_matches | awk "\$1<${current_line}")
 	sorted_matches="${below_matches}\n${above_matches}"
-	if [ "${search_direction:=1}" = 0 ]; then
-		sorted_matches=$(echo $sorted_matches | tail -r)
-	fi
+	[ "${search_direction:=1}" = 0 ] && sorted_matches=$(echo $sorted_matches | tail -r)
 	line_to_move_to=$(echo $sorted_matches | sed "/^\s*$/d" | sed -n "1p")
 	if [ $line_to_move_to ]; then
 		move_line $line_to_move_to
