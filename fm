@@ -113,9 +113,7 @@ draw_screen() {
 	let "number_of_lines=$(echo $output | wc -l)"
 	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	let "last_visible_line = $last_line_to_output"
-	if [ "$last_visible_line" -gt "$number_of_lines" ]; then
-		let "last_visible_line = $number_of_lines"
-	fi
+	[ "$last_visible_line" -gt "$number_of_lines" ] && let "last_visible_line = $number_of_lines"
 	current_line=${1:=1}
 
 	if [ $output ]; then
