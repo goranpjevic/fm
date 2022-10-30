@@ -273,9 +273,7 @@ read_keys() {
 				bookmarked_directory="$(pwd)"
 				;;
 			"'")
-				if [ $bookmarked_directory ]; then
-					go_to "$bookmarked_directory"
-				fi
+				[ $bookmarked_directory ] && go_to "$bookmarked_directory"
 				;;
 			'"')
 				go_to "${previous_directory:="$(pwd)"}"
