@@ -148,6 +148,7 @@ next() {
 }
 
 find() {
+	let "search_direction = $1"
 	read -sk1 letter
 	pattern='^'$(echo $letter | sed -e 's/[]\/$*.^[]/\\&/g')
 	next
@@ -280,12 +281,10 @@ read_keys() {
 				go_to "${previous_directory:="$(pwd)"}"
 				;;
 			'f')
-				let "search_direction = 1"
-				find
+				find 1
 				;;
 			'F')
-				let "search_direction = 0"
-				find
+				find 0
 				;;
 			'/')
 				search 1
