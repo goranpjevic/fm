@@ -71,12 +71,12 @@ move_line() {
 	if [ "$line_to_move_to" -le "$number_of_lines" ] && [ "$line_to_move_to" -ge "1" ]; then
 		update_position $current_line
 		tput cup $actual_line
-		echo $chosen_line | cut -c 1-$(tput cols)
+		echo $chosen_line | cut -c 1-$maximum_line_width
 
 		update_position $1
 		tput rev
 		tput cup $actual_line
-		echo $chosen_line | cut -c 1-$(tput cols)
+		echo $chosen_line | cut -c 1-$maximum_line_width
 		tput sgr0
 
 		print_preview $chosen_line
