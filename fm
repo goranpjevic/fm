@@ -34,7 +34,7 @@ file_preview() {
 			ls $([ "${show_hidden:=0}" = 1 ] && echo "-A") $1 2>/dev/null
 			;;
 		*text*)
-			head -n $maximum_lines $1
+			head -n $maximum_lines $1 | expand 2>/dev/null
 			;;
 		*)
 			file --dereference --brief $1
@@ -45,9 +45,8 @@ file_preview() {
 print_preview() {
 	tput cup 1 $maximum_line_width
 	empty_lines=$(printf ' \n%.0s' {1..$maximum_lines})
-	preview_text=$(file_preview $1 | expand 2>/dev/null)
 	prefix=$(tput cr; tput cuf $maximum_line_width; tput el)
-	printf %s "$preview_text$empty_lines" | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p" | sed "s/^/$prefix/"
+	printf %s "$(file_preview $1)$empty_lines" | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p" | sed "s/^/$prefix/"
 }
 
 update_position() {
