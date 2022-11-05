@@ -43,13 +43,11 @@ file_preview() {
 }
 
 print_preview() {
-	empty_preview=$(printf "$(printf ' %.0s' {1..$maximum_line_width})\n%.0s" {1..$maximum_lines})
+	empty_lines=$(printf ' \n%.0s' {1..$maximum_lines})
+	preview_text=$(file_preview $1 | expand 2>/dev/null)
+	preview=$(printf %s "$preview_text$empty_lines" | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p")
 	tput cup 1 $maximum_line_width
-	printf %s "$empty_preview" | PREFIX=$(tput cr; tput cuf $maximum_line_width) awk '{print ENVIRON["PREFIX"] $0}'
-
-	preview_text=$(file_preview $1 | expand 2>/dev/null | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p")
-	tput cup 1 $maximum_line_width
-	printf %s "$preview_text" | PREFIX=$(tput cr; tput cuf $maximum_line_width) awk '{print ENVIRON["PREFIX"] $0}'
+	printf %s "$preview" | PREFIX=$(tput cr; tput cuf $maximum_line_width; tput el) awk '{print ENVIRON["PREFIX"] $0}'
 }
 
 update_position() {
