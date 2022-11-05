@@ -45,9 +45,10 @@ file_preview() {
 print_preview() {
 	empty_lines=$(printf ' \n%.0s' {1..$maximum_lines})
 	preview_text=$(file_preview $1 | expand 2>/dev/null)
-	preview=$(printf %s "$preview_text$empty_lines" | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p")
+	prefix=$(tput cr; tput cuf $maximum_line_width; tput el)
+	preview=$(printf %s "$preview_text$empty_lines" | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p" | sed "s/^/$prefix/")
 	tput cup 1 $maximum_line_width
-	printf %s "$preview" | PREFIX=$(tput cr; tput cuf $maximum_line_width; tput el) awk '{print ENVIRON["PREFIX"] $0}'
+	printf %s "$preview"
 }
 
 update_position() {
