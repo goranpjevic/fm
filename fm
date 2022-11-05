@@ -43,12 +43,11 @@ file_preview() {
 }
 
 print_preview() {
+	tput cup 1 $maximum_line_width
 	empty_lines=$(printf ' \n%.0s' {1..$maximum_lines})
 	preview_text=$(file_preview $1 | expand 2>/dev/null)
 	prefix=$(tput cr; tput cuf $maximum_line_width; tput el)
-	preview=$(printf %s "$preview_text$empty_lines" | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p" | sed "s/^/$prefix/")
-	tput cup 1 $maximum_line_width
-	printf %s "$preview"
+	printf %s "$preview_text$empty_lines" | cut -c 1-$maximum_line_width | sed -n "1,${maximum_lines}p" | sed "s/^/$prefix/"
 }
 
 update_position() {
