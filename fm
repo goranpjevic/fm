@@ -269,8 +269,7 @@ read_keys() {
 				;;
 			'd')
 				let "new_line = $current_line + $half_lines"
-				[ $new_line -gt $number_of_lines ] && new_line=$number_of_lines
-				move_line $new_line
+				move_line $([ $new_line -gt $number_of_lines ] && echo $number_of_lines || echo $new_line)
 				;;
 			'z')
 				toggle_hidden_files
