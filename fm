@@ -107,6 +107,7 @@ draw_screen() {
 
 	let "maximum_lines = $(tput lines) - 2"
 	let "maximum_line_width = $(tput cols) / 2"
+	let "half_lines = $maximum_lines / 2"
 	let "number_of_lines=$(echo $output | wc -l)"
 	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	let "last_visible_line = $last_line_to_output"
@@ -261,6 +262,16 @@ read_keys() {
 				;;
 			'L')
 				move_line $last_visible_line
+				;;
+			'u')
+				let "new_line = $current_line - $half_lines"
+				[ $new_line -lt 1 ] && new_line=1
+				move_line $new_line
+				;;
+			'd')
+				let "new_line = $current_line + $half_lines"
+				[ $new_line -gt $number_of_lines ] && new_line=$number_of_lines
+				move_line $new_line
 				;;
 			'z')
 				toggle_hidden_files
