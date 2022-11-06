@@ -39,7 +39,7 @@ usage:
   L - move to the last line in the output
   u - move half of the screen up
   d - move half of the screen down
-  z - toggle hidden files
+  . - toggle hidden files
   ~/^h - cd to $HOME
   b - bookmark the current directory
   ' - go to the bookmarked directory
