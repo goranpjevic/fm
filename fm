@@ -234,7 +234,6 @@ read_keys() {
 	while true; do
 		read -sk1 key
 		[ $key = $'\u1b' ] && read -sk2 key
-
 		case $key in
 			'j'|'[B'|$'\ue')
 				move_line "$current_line + 1"
