@@ -127,6 +127,14 @@ go_to_parent_directory() {
 	fi
 }
 
+center_output() {
+	let "first_line_to_output = $current_line - ($maximum_lines / 2)"
+	[ $first_line_to_output -lt 1 ] && first_line_to_output=1
+	let "middle_line = $maximum_lines / 2"
+	actual_line=$middle_line
+	draw_screen $current_line
+}
+
 toggle_hidden_files() {
 	((show_hidden ^= 1))
 	first_line_to_output=1
@@ -270,6 +278,10 @@ read_keys() {
 				let "new_line = $current_line + $half_lines"
 				move_line $([ $new_line -gt $number_of_lines ] && echo $number_of_lines || echo $new_line)
 				;;
+			'z')
+				center_output
+				;;
+
 			'.')
 				toggle_hidden_files
 				;;
