@@ -128,9 +128,9 @@ go_to_parent_directory() {
 }
 
 center_output() {
-	let "first_line_to_output = $current_line - ($maximum_lines / 2)"
-	[ $first_line_to_output -lt 1 ] && first_line_to_output=1
 	let "actual_line = $maximum_lines / 2"
+	let "first_line_to_output = $current_line - $actual_line"
+	[ $first_line_to_output -lt 1 ] && first_line_to_output=1
 	draw_screen $current_line
 }
 
