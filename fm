@@ -85,7 +85,7 @@ move_line() {
 		[ $(echo $selected_lines | sed -n "/^${selected_file}\$/=") ] && tput rev
 		tput cup $(tput lines)
 		tput el
-		echo -n $(ls -ld $chosen_line | cut -c 1-$(tput cols))
+		echo -n "$(ls -ld $chosen_line | cut -c 1-$(tput cols))"
 		tput sgr0
 	fi
 }
