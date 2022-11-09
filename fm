@@ -191,11 +191,9 @@ copy_or_move() {
 	if [ $selected_lines ] && [ "$show_selected_files" = 0 ]; then
 		tput cup $(tput lines)
 		tput el
-		echo -n "are you sure you want to $1 the selected files to the current directory? [y/N]"
-		read -sq answer
-		tput cup $(tput lines)
-		tput el
-		if [ $answer = "y" ]; then
+		if read -sq "?are you sure you want to $1 the selected files to the current directory? [y/N]"; then
+			tput cup $(tput lines)
+			tput el
 			tput cnorm
 			stty sane
 			selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
