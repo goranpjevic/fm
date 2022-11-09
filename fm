@@ -198,9 +198,8 @@ copy_or_move() {
 		if [ $answer = "y" ]; then
 			tput cnorm
 			stty sane
-			selected_lines_array=(${(f)selected_lines})
 			selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
-			for one_selected_line in $selected_lines_array; do
+			for one_selected_line in ${(f)selected_lines}; do
 				eval $selection_action -i '"'$one_selected_line'"' .
 			done
 			selected_lines=
