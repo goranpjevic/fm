@@ -46,7 +46,7 @@ print_preview() {
 	tput cup 1
 	empty_lines=$(printf ' \n%.0s' {1..$maximum_lines})
 	prefix=$(tput cuf $maximum_line_width; tput el)
-	echo "$(file_preview $1 | expand 2>/dev/null)$empty_lines" | cut -c 1-$maximum_line_width | sed -n "s/^/$prefix/;1,${maximum_lines}p"
+	echo "$(file_preview $1)$empty_lines" | expand 2>/dev/null | cut -c 1-$maximum_line_width | sed -n "s/^/$prefix/;1,${maximum_lines}p"
 }
 
 update_position() {
