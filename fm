@@ -277,7 +277,6 @@ read_keys() {
 			'z')
 				center_output
 				;;
-
 			'.')
 				toggle_hidden_files
 				;;
