@@ -197,9 +197,7 @@ copy_or_move() {
 			tput cnorm
 			stty sane
 			selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
-			for one_selected_line in ${(f)selected_lines}; do
-				eval $selection_action -i '"'$one_selected_line'"' .
-			done
+			eval $selection_action -i $(echo $selected_lines | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -) .
 			selected_lines=
 		fi
 		draw_screen
