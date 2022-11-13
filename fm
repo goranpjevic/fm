@@ -181,7 +181,7 @@ select_file() {
 		if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')$/=")" ]; then
 			selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')$/d")
 		else
-			selected_lines=$(echo "$selected_lines""\n""$file_to_select" | sed "/^\s*$/d")
+			selected_lines=$(echo "$selected_lines\n$file_to_select" | sed "/^\s*$/d")
 		fi
 		move_line $current_line
 	fi
