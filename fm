@@ -288,7 +288,7 @@ read_keys() {
 				[ $bookmarked_directory ] && go_to "$bookmarked_directory"
 				;;
 			'"')
-				go_to "${previous_directory:="$(pwd)"}"
+				go_to "$previous_directory"
 				;;
 			'f')
 				find 1
