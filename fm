@@ -40,13 +40,13 @@ file_preview() {
 			file --dereference --brief $1
 			;;
 	esac
+	[ $2 ] && printf ' \n%.0s' {1..$2}
 }
 
 print_preview() {
 	tput cup 1
-	empty_lines=$(printf ' \n%.0s' {1..$maximum_lines})
 	prefix=$(tput cuf $maximum_line_width; tput el)
-	echo "$(file_preview $1)$empty_lines" | expand 2>/dev/null | cut -c 1-$maximum_line_width | sed -n "s/^/$prefix/;1,${maximum_lines}p"
+	file_preview $1 $maximum_lines | expand 2>/dev/null | cut -c 1-$maximum_line_width | sed -n "s/^/$prefix/;1,${maximum_lines}p"
 }
 
 update_position() {
