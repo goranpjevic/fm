@@ -19,7 +19,7 @@ installation:
     configuration file (e.g. '~/.zshrc'):
 
       #start lake, and cd to last directory on exit
-      f() {   
+      l() {   
               tmp="$(mktemp)"
               lake ${1:=.} $tmp
               cd "$(cat "$tmp")"
