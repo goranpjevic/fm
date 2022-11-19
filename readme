@@ -4,7 +4,7 @@ terminal file manager.
 
 notes:
 
-  - 'zsh' must be installed for 'fm' to work
+  - 'zsh' must be installed for 'lake' to work
 
   - all searches are case insensitive
 
@@ -13,15 +13,15 @@ notes:
 
 installation:
 
-  - add the 'fm' script to $PATH
+  - add the 'lake' script to $PATH
 
-  - to cd to last open directory in fm, add the following to your shell
+  - to cd to last open directory in lake, add the following to your shell
     configuration file (e.g. '~/.zshrc'):
 
-      #start fm, and cd to last directory on exit
+      #start lake, and cd to last directory on exit
       f() {   
               tmp="$(mktemp)"
-              fm ${1:=.} $tmp
+              lake ${1:=.} $tmp
               cd "$(cat "$tmp")"
               rm -f "$tmp"
       }
@@ -57,4 +57,4 @@ usage:
   c - copy selected files to the current directory
   m - move selected files to the current directory
   : - execute shell command
-  q/^c - quit fm
+  q/^c - quit lake
