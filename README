@@ -11,6 +11,8 @@ notes:
   - when executing a shell command, use '$.' to reference the highlighted file
     or directory, and '$%' to reference all the displayed files or directories
 
+  - to use the fuzzy finder, install 'fzf'
+
 installation:
 
   - add the 'lake' script to $PATH
