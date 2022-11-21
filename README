@@ -4,16 +4,16 @@ terminal file manager.
 
 notes:
 
-  - 'zsh' must be installed for 'lake' to work
-
   - all searches are case insensitive
 
   - when executing a shell command, use '$.' to reference the highlighted file
     or directory, and '$%' to reference all the displayed files or directories
 
-  - to use the fuzzy finder, install 'fzf'
-
 installation:
+
+  - 'zsh' must be installed for 'lake' to work
+
+  - to use the fuzzy finder, install 'fzf'
 
   - add the 'lake' script to $PATH
 
