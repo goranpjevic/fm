@@ -2,13 +2,6 @@
 
 terminal file manager.
 
-notes:
-
-  - all searches are case insensitive
-
-  - when executing a shell command, use '$.' to reference the highlighted file
-    or directory, and '$%' to reference all the displayed files or directories
-
 installation:
 
   - 'zsh' must be installed for 'lake' to work
@@ -27,6 +20,13 @@ installation:
               cd "$(cat "$tmp")"
               rm -f "$tmp"
       }
+
+notes:
+
+  - all searches are case insensitive
+
+  - when executing a shell command, use '$.' to reference the highlighted file
+    or directory, and '$%' to reference all the displayed files or directories
 
 usage:
 
