@@ -59,4 +59,5 @@ usage:
   c - copy selected files to the current directory
   m - move selected files to the current directory
   : - execute shell command
+  r/^l - redraw the screen
   q/^c - quit lake
