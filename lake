@@ -204,21 +204,24 @@ copy_or_move() {
 	fi
 }
 
+stay_on_same_line() {
+	let "number_of_files = $(file_preview '.' | wc -l)"
+	if [ -e "$chosen_line" ]; then
+		current_line=$(file_preview '.' | sed -ne "/^$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
+	elif [ $number_of_files -lt $current_line ]; then
+		current_line=$([ $number_of_files = 0 ] && echo 1 || echo $number_of_files)
+	fi
+	draw_screen $current_line
+}
+
 shell_command() {
 	current_directory="$(pwd)"
 	user_input command_to_eval
 	one_line=$(echo $chosen_line | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/")
 	all_lines=$(echo $output | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -)
 	eval $command_to_eval:gs/$./$one_line/:gs/$%/$all_lines
-	let "number_of_files = $(file_preview '.' | wc -l)"
-	if [ $(pwd) != $current_directory ]; then
-		current_line=1
-	elif [ -e "$chosen_line" ]; then
-		current_line=$(file_preview '.' | sed -ne "/^$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
-	elif [ $number_of_files -lt $current_line ]; then
-		current_line=$([ $number_of_files = 0 ] && echo 1 || echo $number_of_files)
-	fi
-	draw_screen $current_line
+	[ $(pwd) != $current_directory ] && current_line=1
+	stay_on_same_line
 }
 
 fuzzy_find() {
@@ -333,8 +336,7 @@ read_keys() {
 				shell_command
 				;;
 			'r'|$'\uc')
-				draw_screen $current_line
-				[ $current_line -gt $number_of_lines ] && move_line $([ $number_of_lines = 0 ] && echo 1 || echo $number_of_lines)
+				stay_on_same_line
 				;;
 			'q')
 				quit $1
