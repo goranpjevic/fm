@@ -204,7 +204,7 @@ copy_or_move() {
 	fi
 }
 
-stay_on_same_line() {
+redraw_screen() {
 	let "number_of_files = $(file_preview '.' | wc -l)"
 	if [ -e "$chosen_line" ]; then
 		current_line=$(file_preview '.' | sed -ne "/^$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
@@ -221,7 +221,7 @@ shell_command() {
 	all_lines=$(echo $output | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -)
 	eval $command_to_eval:gs/$./$one_line/:gs/$%/$all_lines
 	[ $(pwd) != $current_directory ] && current_line=1
-	stay_on_same_line
+	redraw_screen
 }
 
 fuzzy_find() {
@@ -336,7 +336,7 @@ read_keys() {
 				shell_command
 				;;
 			'r'|$'\uc')
-				stay_on_same_line
+				redraw_screen
 				;;
 			'q')
 				quit $1
