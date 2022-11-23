@@ -134,6 +134,17 @@ center_output() {
 	draw_screen $current_line
 }
 
+prune_selected_files() {
+	new_selected_files=
+	i=1
+	while [ $i -le $(echo "$selected_lines" | wc -l) ]; do
+		one_selected_file=$(echo "$selected_lines" | sed -n "${i}p")
+		[ -e "$one_selected_file" ] && new_selected_files="$new_selected_files\n$one_selected_file"
+		let "i = i + 1"
+	done
+	selected_lines=$(echo "$new_selected_files" | sed "/^\s*$/d")
+}
+
 toggle_hidden_files() {
 	((show_hidden ^= 1))
 	first_line_to_output=1
@@ -220,6 +231,7 @@ shell_command() {
 	one_line=$(echo $chosen_line | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/")
 	all_lines=$(echo $output | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -)
 	eval $command_to_eval:gs/$./$one_line/:gs/$%/$all_lines
+	prune_selected_files
 	[ $(pwd) != $current_directory ] && current_line=1
 	redraw_screen
 }
