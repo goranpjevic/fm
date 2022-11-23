@@ -216,6 +216,7 @@ copy_or_move() {
 }
 
 redraw_screen() {
+	prune_selected_files
 	all_files=$([ "$show_selected_files" = 0 ] && file_preview '.' || echo "$selected_lines")
 	let "number_of_files = $(echo $all_files | wc -l)"
 	if [ -e "$chosen_line" ]; then
@@ -232,7 +233,6 @@ shell_command() {
 	one_line=$(echo $chosen_line | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/")
 	all_lines=$(echo $output | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -)
 	eval $command_to_eval:gs/$./$one_line/:gs/$%/$all_lines
-	prune_selected_files
 	[ $(pwd) != $current_directory ] && current_line=1
 	redraw_screen
 }
