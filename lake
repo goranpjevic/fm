@@ -97,7 +97,7 @@ draw_screen() {
 
 	tput bold
 	if [ "${show_selected_files:=0}" = 0 ]; then
-		output=$(file_preview "$(pwd)")
+		output=$(file_preview '.')
 		echo $(pwd) | cut -c 1-$(tput cols)
 	else
 		output=$selected_lines
