@@ -205,14 +205,15 @@ copy_or_move() {
 }
 
 prune_selected_files() {
-	new_selected_files=
 	i=1
 	while [ $i -le $(echo "$selected_lines" | wc -l) ]; do
 		one_selected_file=$(echo "$selected_lines" | sed -n "${i}p")
-		[ -e "$one_selected_file" ] && new_selected_files="$new_selected_files\n$one_selected_file"
-		let "i = i + 1"
+		if [ $one_selected_file ] && [ ! -e "$one_selected_file" ]; then
+			selected_lines=$(echo "$selected_lines" | sed "${i}d")
+		else
+			let "i = i + 1"
+		fi
 	done
-	selected_lines=$(echo "$new_selected_files" | sed "/^\s*$/d")
 }
 
 redraw_screen() {
