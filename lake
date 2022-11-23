@@ -336,6 +336,7 @@ read_keys() {
 				;;
 			't')
 				((show_selected_files ^= 1))
+				prune_selected_files
 				draw_screen
 				;;
 			'c')
