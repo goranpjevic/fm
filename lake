@@ -134,14 +134,6 @@ center_output() {
 	draw_screen $current_line
 }
 
-toggle_hidden_files() {
-	((show_hidden ^= 1))
-	first_line_to_output=1
-	selected_line=$chosen_line
-	line_to_move_to=$(file_preview $(pwd) | sed -ne "/^${selected_line}\$/=")
-	draw_screen $([ "$line_to_move_to" -gt 0 ] && echo $line_to_move_to)
-}
-
 next() {
 	all_matches=$(echo $output | sed -ne "/${pattern:=.}/I=")
 	below_matches=$(echo $all_matches | awk "\$1>${current_line}")
@@ -292,7 +284,8 @@ read_keys() {
 				center_output
 				;;
 			'.')
-				toggle_hidden_files
+				((show_hidden ^= 1))
+				redraw_screen
 				;;
 			'~'|$'\u8')
 				go_to $HOME
