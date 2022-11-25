@@ -34,10 +34,10 @@ file_preview() {
 			ls $([ "${show_hidden:=0}" = 1 ] && echo "-A") $1 2>/dev/null
 			;;
 		*text*)
-			head -n $maximum_lines $1
+			head -n $maximum_lines $1 | expand 2>/dev/null 
 			;;
 		*)
-			file --dereference --brief $1
+			file --dereference --brief $1 | expand 2>/dev/null 
 			;;
 	esac
 	[ $2 ] && printf ' \n%.0s' {1..$2}
@@ -46,7 +46,7 @@ file_preview() {
 print_preview() {
 	tput cup 1
 	prefix=$(tput cuf $maximum_line_width; tput el)
-	file_preview $1 $maximum_lines | expand 2>/dev/null | cut -c 1-$maximum_line_width | sed -n "s/^/$prefix/;1,${maximum_lines}p"
+	file_preview $1 $maximum_lines | cut -c 1-$maximum_line_width | sed -n "s/^/$prefix/;1,${maximum_lines}p"
 }
 
 update_position() {
