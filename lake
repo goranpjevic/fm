@@ -107,7 +107,6 @@ draw_screen() {
 
 	let "maximum_lines = $(tput lines) - 2"
 	let "maximum_line_width = $(tput cols) / 2"
-	let "half_lines = $maximum_lines / 2"
 	let "number_of_lines=$(echo $output | wc -l)"
 	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	let "last_visible_line = $last_line_to_output"
@@ -273,11 +272,11 @@ read_keys() {
 				move_line $last_visible_line
 				;;
 			'u')
-				let "new_line = $current_line - $half_lines"
+				let "new_line = $current_line - ($maximum_lines / 2)"
 				move_line $([ $new_line -lt 1 ] && echo 1 || echo $new_line)
 				;;
 			'd')
-				let "new_line = $current_line + $half_lines"
+				let "new_line = $current_line + ($maximum_lines / 2)"
 				move_line $([ $new_line -gt $number_of_lines ] && echo $number_of_lines || echo $new_line)
 				;;
 			'z')
