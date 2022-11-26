@@ -223,11 +223,6 @@ shell_command() {
 	redraw_screen
 }
 
-fuzzy_find() {
-	go_to "$(fzf)"
-	draw_screen
-}
-
 quit() {
 	tput clear
 	tput rmcup
@@ -318,7 +313,8 @@ read_keys() {
 				((search_direction ^= 1))
 				;;
 			'e'|$'\ub')
-				fuzzy_find
+				go_to "$(fzf)"
+				draw_screen
 				;;
 			's'|' ')
 				select_file $chosen_line
