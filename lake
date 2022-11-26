@@ -258,7 +258,7 @@ read_keys() {
 				go_to $chosen_line
 				;;
 			'h'|'[D'|$'\u2')
-				[ "$show_selected" = 1 ] || [ "$(pwd)" = "/" ] && continue
+				[ "$show_selected" = 1 ] || [ $(pwd) = "/" ] && continue
 				go_to .. $(file_preview "$(dirname "$(pwd)")" | sed -n "/^$(basename "$(pwd)" | esc_all)\$/=")
 				;;
 			'H')
