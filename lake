@@ -205,9 +205,9 @@ copy_or_move() {
 
 prune_selected_files() {
 	i=1
-	while [ $i -le $(echo "$selected_lines" | wc -l) ]; do
+	while [ $selected_lines ] && [ $i -le $(echo "$selected_lines" | wc -l) ]; do
 		one_file=$(echo "$selected_lines" | sed -n "${i}p")
-		[ $one_file ] && [ ! -e "$one_file" ] && selected_lines=$(echo "$selected_lines" | sed "${i}d") || let "i = i + 1"
+		[ ! -e "$one_file" ] && selected_lines=$(echo "$selected_lines" | sed "${i}d") || let "i = i + 1"
 	done
 }
 
