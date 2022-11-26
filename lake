@@ -4,7 +4,7 @@ go_to() {
 	case $(file --dereference --brief $1) in
 		*directory*)
 			show_selected_files=0
-			first_line_to_output=1
+			start_line=1
 			previous_directory="$(pwd)"
 			cd $1
 			draw_screen $2
@@ -53,16 +53,16 @@ update_position() {
 	let "current_line = $1"
 	chosen_line=$(echo $output | sed "${current_line}q;d")
 
-	if [ $current_line -gt $last_line_to_output ]; then
-		let "first_line_to_output = $current_line - $maximum_lines + 1"
+	if [ $current_line -gt $end_line ]; then
+		let "start_line = $current_line - $maximum_lines + 1"
 		actual_line=$maximum_lines
 		draw_screen $current_line
-	elif [ $current_line -lt $first_line_to_output ]; then
-		let "first_line_to_output = $current_line"
+	elif [ $current_line -lt $start_line ]; then
+		let "start_line = $current_line"
 		actual_line=1
 		draw_screen $current_line
 	else
-		let "actual_line = $current_line - $first_line_to_output + 1"
+		let "actual_line = $current_line - $start_line + 1"
 	fi
 }
 
@@ -116,13 +116,13 @@ draw_screen() {
 	let "maximum_lines = $(tput lines) - 2"
 	let "maximum_line_width = $(tput cols) / 2"
 	let "last_line=$(echo $output | wc -l)"
-	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
-	let "last_visible_line = $last_line_to_output"
+	let "end_line = ${start_line:=1} + $maximum_lines - 1"
+	let "last_visible_line = $end_line"
 	[ "$last_visible_line" -gt "$last_line" ] && let "last_visible_line = $last_line"
 	current_line=${1:=1}
 
 	if [ $output ]; then
-		echo $output | sed -n "${first_line_to_output},${last_line_to_output}p" | cut -c 1-$maximum_line_width
+		echo $output | sed -n "${start_line},${end_line}p" | cut -c 1-$maximum_line_width
 		move_line $current_line
 	fi
 }
@@ -136,8 +136,8 @@ go_to_parent_directory() {
 
 center_output() {
 	let "actual_line = $maximum_lines / 2"
-	let "first_line_to_output = $current_line - $actual_line"
-	[ $first_line_to_output -lt 1 ] && first_line_to_output=1
+	let "start_line = $current_line - $actual_line"
+	[ $start_line -lt 1 ] && start_line=1
 	draw_screen $current_line
 }
 
@@ -272,10 +272,10 @@ read_keys() {
 				go_to_parent_directory
 				;;
 			'H')
-				move_line $first_line_to_output
+				move_line $start_line
 				;;
 			'M')
-				move_line "($first_line_to_output + $last_visible_line) / 2"
+				move_line "($start_line + $last_visible_line) / 2"
 				;;
 			'L')
 				move_line $last_visible_line
