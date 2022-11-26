@@ -207,7 +207,7 @@ prune_selected_files() {
 	i=1
 	while [ $selected_lines ] && [ $i -le $(echo "$selected_lines" | wc -l) ]; do
 		one_file=$(echo "$selected_lines" | sed -n "${i}p")
-		[ ! -e "$one_file" ] && selected_lines=$(echo "$selected_lines" | sed "${i}d") || let "i = i + 1"
+		[ -e "$one_file" ] && let "i = i + 1" || selected_lines=$(echo "$selected_lines" | sed "${i}d")
 	done
 }
 
