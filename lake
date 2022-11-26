@@ -90,7 +90,7 @@ move_line() {
 		print_preview $chosen_line
 
 		selected_file=$(echo $([ "$show_selected" = 0 ] && echo $(pwd)"/")$chosen_line | esc_all)
-		[ $(echo $selected_lines | sed -n "/^${selected_file}\$/=") ] && tput rev
+		[ $(echo $sel_lines | sed -n "/^${selected_file}\$/=") ] && tput rev
 		tput cup $(tput lines)
 		tput el
 		echo -n "$(ls -ld $chosen_line | cut -c 1-$(tput cols))"
@@ -108,8 +108,8 @@ draw_screen() {
 		output=$(file_preview .)
 		echo $(pwd) | cut -c 1-$(tput cols)
 	else
-		output=$selected_lines
-		echo "number of files selected: $(echo -n $selected_lines | grep -c ^)" | cut -c 1-$(tput cols)
+		output=$sel_lines
+		echo "number of files selected: $(echo -n $sel_lines | grep -c ^)" | cut -c 1-$(tput cols)
 	fi
 	tput sgr0
 
@@ -169,16 +169,16 @@ search() {
 select_file() {
 	[ ! $output ] && return
 	file_to_select=$([ "$show_selected" = 0 ] && echo $(pwd)"/")$1
-	if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
-		selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
+	if [ "$(echo $sel_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
+		sel_lines=$(echo $sel_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
 	else
-		selected_lines=$(echo "$selected_lines\n$file_to_select" | sed "/^\s*$/d")
+		sel_lines=$(echo "$sel_lines\n$file_to_select" | sed "/^\s*$/d")
 	fi
 	move_line $current_line
 }
 
 copy_or_move() {
-	[ ! $selected_lines ] || [ "$show_selected" = 1 ] && return
+	[ ! $sel_lines ] || [ "$show_selected" = 1 ] && return
 	tput cup $(tput lines)
 	tput el
 	if read -sq "?are you sure you want to $1 the selected files to the current directory? [y/N]"; then
@@ -187,22 +187,22 @@ copy_or_move() {
 		tput cnorm
 		stty sane
 		cp_or_mv=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
-		eval $cp_or_mv -i $(echo $selected_lines | quote_all | paste -sd ' ' -) . && selected_lines= || read -sk1
+		eval $cp_or_mv -i $(echo $sel_lines | quote_all | paste -sd ' ' -) . && sel_lines= || read -sk1
 	fi
 	redraw_screen
 }
 
 prune_selected_files() {
 	i=1
-	while [ $selected_lines ] && [ $i -le $(echo "$selected_lines" | wc -l) ]; do
-		one_file=$(echo "$selected_lines" | sed -n "${i}p")
-		[ -e "$one_file" ] && let "i = i + 1" || selected_lines=$(echo "$selected_lines" | sed "${i}d")
+	while [ $sel_lines ] && [ $i -le $(echo "$sel_lines" | wc -l) ]; do
+		one_file=$(echo "$sel_lines" | sed -n "${i}p")
+		[ -e "$one_file" ] && let "i = i + 1" || sel_lines=$(echo "$sel_lines" | sed "${i}d")
 	done
 }
 
 redraw_screen() {
 	prune_selected_files
-	all_files=$([ "$show_selected" = 0 ] && file_preview . || echo "$selected_lines")
+	all_files=$([ "$show_selected" = 0 ] && file_preview . || echo "$sel_lines")
 	let "number_of_files = $(echo $all_files | wc -l)"
 	line_number=$(echo $all_files | sed -n "/^$(echo $chosen_line | esc_all)\$/=")
 	if [ $line_number ]; then
