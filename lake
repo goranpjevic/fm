@@ -66,6 +66,10 @@ update_position() {
 	fi
 }
 
+esc_all() {
+	sed -e 's/[]\/$*.^[]/\\&/g'
+}
+
 move_line() {
 	let "line_to_move_to = $1"
 	if [ "$line_to_move_to" -le "$number_of_lines" ] && [ "$line_to_move_to" -ge "1" ]; then
@@ -81,7 +85,7 @@ move_line() {
 
 		print_preview $chosen_line
 
-		selected_file=$(echo $([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')
+		selected_file=$(echo $([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$chosen_line | esc_all)
 		[ $(echo $selected_lines | sed -n "/^${selected_file}\$/=") ] && tput rev
 		tput cup $(tput lines)
 		tput el
@@ -120,7 +124,7 @@ draw_screen() {
 }
 
 go_to_parent_directory() {
-	current_directory=$(basename "$(pwd)" | sed -e 's/[]\/$*.^[]/\\&/g')
+	current_directory=$(basename "$(pwd)" | esc_all)
 	if [ "$show_selected_files" = 0 ] && [ ! "$current_directory" = "\/" ]; then
 		go_to '..' $(file_preview "$(dirname "$(pwd)")" | sed -ne "/^$current_directory\$/=")
 	fi
@@ -146,7 +150,7 @@ next() {
 find() {
 	let "search_direction = $1"
 	read -sk1 letter
-	pattern='^'$(echo $letter | sed -e 's/[]\/$*.^[]/\\&/g')
+	pattern='^'$(echo $letter | esc_all)
 	next
 }
 
@@ -169,8 +173,8 @@ search() {
 select_file() {
 	if [ $output ]; then
 		file_to_select=$([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$1
-		if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')$/=")" ]; then
-			selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | sed -e 's/[]\/$*.^[]/\\&/g')$/d")
+		if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
+			selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
 		else
 			selected_lines=$(echo "$selected_lines\n$file_to_select" | sed "/^\s*$/d")
 		fi
@@ -208,7 +212,7 @@ redraw_screen() {
 	all_files=$([ "$show_selected_files" = 0 ] && file_preview . || echo "$selected_lines")
 	let "number_of_files = $(echo $all_files | wc -l)"
 	if [ -e "$chosen_line" ]; then
-		current_line=$(echo $all_files | sed -ne "/^$(echo $chosen_line | sed -e 's/[]\/$*.^[]/\\&/g')\$/=")
+		current_line=$(echo $all_files | sed -ne "/^$(echo $chosen_line | esc_all)\$/=")
 	elif [ $number_of_files -lt $current_line ]; then
 		current_line=$([ $number_of_files = 0 ] && echo 1 || echo $number_of_files)
 	fi
