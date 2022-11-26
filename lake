@@ -34,7 +34,7 @@ file_preview() {
 			ls $([ "${show_hidden:=0}" = 1 ] && echo "-A") $1 2>/dev/null
 			;;
 		*text*)
-			head -n $maximum_lines $1 | expand 2>/dev/null 
+			head -n $max_lines $1 | expand 2>/dev/null 
 			;;
 		*)
 			file --dereference --brief $1 | expand 2>/dev/null 
@@ -45,8 +45,8 @@ file_preview() {
 
 print_preview() {
 	tput cup 1
-	prefix=$(tput cuf $maximum_line_width; tput el)
-	file_preview $1 $maximum_lines | cut -c 1-$maximum_line_width | sed -n "s/^/$prefix/;1,${maximum_lines}p"
+	prefix=$(tput cuf $max_line_width; tput el)
+	file_preview $1 $max_lines | cut -c 1-$max_line_width | sed -n "s/^/$prefix/;1,${max_lines}p"
 }
 
 update_position() {
@@ -54,8 +54,8 @@ update_position() {
 	chosen_line=$(echo $output | sed "${current_line}q;d")
 
 	if [ $current_line -gt $end_line ]; then
-		let "start_line = $current_line - $maximum_lines + 1"
-		actual_line=$maximum_lines
+		let "start_line = $current_line - $max_lines + 1"
+		actual_line=$max_lines
 		draw_screen $current_line
 	elif [ $current_line -lt $start_line ]; then
 		let "start_line = $current_line"
@@ -79,12 +79,12 @@ move_line() {
 	if [ "$line_to_move_to" -le "$last_line" ] && [ "$line_to_move_to" -ge "1" ]; then
 		update_position $current_line
 		tput cup $actual_line
-		echo $chosen_line | cut -c 1-$maximum_line_width
+		echo $chosen_line | cut -c 1-$max_line_width
 
 		update_position $1
 		tput rev
 		tput cup $actual_line
-		echo $chosen_line | cut -c 1-$maximum_line_width
+		echo $chosen_line | cut -c 1-$max_line_width
 		tput sgr0
 
 		print_preview $chosen_line
@@ -113,15 +113,15 @@ draw_screen() {
 	fi
 	tput sgr0
 
-	let "maximum_lines = $(tput lines) - 2"
-	let "maximum_line_width = $(tput cols) / 2"
+	let "max_lines = $(tput lines) - 2"
+	let "max_line_width = $(tput cols) / 2"
 	let "last_line=$(echo $output | wc -l)"
-	let "end_line = ${start_line:=1} + $maximum_lines - 1"
+	let "end_line = ${start_line:=1} + $max_lines - 1"
 	[ "$end_line" -gt "$last_line" ] && end_line=$last_line
 	current_line=${1:=1}
 
 	if [ $output ]; then
-		echo $output | sed -n "${start_line},${end_line}p" | cut -c 1-$maximum_line_width
+		echo $output | sed -n "${start_line},${end_line}p" | cut -c 1-$max_line_width
 		move_line $current_line
 	fi
 }
@@ -134,7 +134,7 @@ go_to_parent_directory() {
 }
 
 center_output() {
-	let "actual_line = $maximum_lines / 2"
+	let "actual_line = $max_lines / 2"
 	let "start_line = $current_line - $actual_line"
 	[ $start_line -lt 1 ] && start_line=1
 	draw_screen $current_line
@@ -280,11 +280,11 @@ read_keys() {
 				move_line $end_line
 				;;
 			'u')
-				let "new_line = $current_line - ($maximum_lines / 2)"
+				let "new_line = $current_line - ($max_lines / 2)"
 				move_line $([ $new_line -lt 1 ] && echo 1 || echo $new_line)
 				;;
 			'd')
-				let "new_line = $current_line + ($maximum_lines / 2)"
+				let "new_line = $current_line + ($max_lines / 2)"
 				move_line $([ $new_line -gt $last_line ] && echo $last_line || echo $new_line)
 				;;
 			'z')
