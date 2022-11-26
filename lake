@@ -3,7 +3,7 @@
 go_to() {
 	case $(file --dereference --brief $1) in
 		*directory*)
-			show_selected_files=0
+			show_selected=0
 			start_line=1
 			previous_directory="$(pwd)"
 			cd $1
@@ -89,7 +89,7 @@ move_line() {
 
 		print_preview $chosen_line
 
-		selected_file=$(echo $([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$chosen_line | esc_all)
+		selected_file=$(echo $([ "$show_selected" = 0 ] && echo $(pwd)"/")$chosen_line | esc_all)
 		[ $(echo $selected_lines | sed -n "/^${selected_file}\$/=") ] && tput rev
 		tput cup $(tput lines)
 		tput el
@@ -104,7 +104,7 @@ draw_screen() {
 	tput civis
 
 	tput bold
-	if [ "${show_selected_files:=0}" = 0 ]; then
+	if [ "${show_selected:=0}" = 0 ]; then
 		output=$(file_preview .)
 		echo $(pwd) | cut -c 1-$(tput cols)
 	else
@@ -128,7 +128,7 @@ draw_screen() {
 
 go_to_parent_directory() {
 	current_directory=$(basename "$(pwd)" | esc_all)
-	if [ "$show_selected_files" = 0 ] && [ ! "$current_directory" = "\/" ]; then
+	if [ "$show_selected" = 0 ] && [ ! "$current_directory" = "\/" ]; then
 		go_to '..' $(file_preview "$(dirname "$(pwd)")" | sed -ne "/^$current_directory\$/=")
 	fi
 }
@@ -175,7 +175,7 @@ search() {
 
 select_file() {
 	if [ $output ]; then
-		file_to_select=$([ "$show_selected_files" = 0 ] && echo $(pwd)"/")$1
+		file_to_select=$([ "$show_selected" = 0 ] && echo $(pwd)"/")$1
 		if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
 			selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
 		else
@@ -186,7 +186,7 @@ select_file() {
 }
 
 copy_or_move() {
-	if [ $selected_lines ] && [ "$show_selected_files" = 0 ]; then
+	if [ $selected_lines ] && [ "$show_selected" = 0 ]; then
 		tput cup $(tput lines)
 		tput el
 		if read -sq "?are you sure you want to $1 the selected files to the current directory? [y/N]"; then
@@ -212,7 +212,7 @@ prune_selected_files() {
 
 redraw_screen() {
 	prune_selected_files
-	all_files=$([ "$show_selected_files" = 0 ] && file_preview . || echo "$selected_lines")
+	all_files=$([ "$show_selected" = 0 ] && file_preview . || echo "$selected_lines")
 	let "number_of_files = $(echo $all_files | wc -l)"
 	line_number=$(echo $all_files | sed -n "/^$(echo $chosen_line | esc_all)\$/=")
 	if [ $line_number ]; then
@@ -333,7 +333,7 @@ read_keys() {
 				select_file $chosen_line
 				;;
 			't')
-				((show_selected_files ^= 1))
+				((show_selected ^= 1))
 				prune_selected_files
 				draw_screen
 				;;
