@@ -189,7 +189,7 @@ copy_or_move() {
 		cp_or_mv=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
 		eval $cp_or_mv -i $(echo $selected_lines | quote_all | paste -sd ' ' -) . && selected_lines= || read -sk1
 	fi
-	draw_screen
+	redraw_screen
 }
 
 prune_selected_files() {
