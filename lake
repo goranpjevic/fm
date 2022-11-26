@@ -109,7 +109,7 @@ draw_screen() {
 		echo $(pwd) | cut -c 1-$(tput cols)
 	else
 		output=$selected_lines
-		echo "number of files selected: $(echo -n $selected_lines | grep -c '^')" | cut -c 1-$(tput cols)
+		echo "number of files selected: $(echo -n $selected_lines | grep -c ^)" | cut -c 1-$(tput cols)
 	fi
 	tput sgr0
 
