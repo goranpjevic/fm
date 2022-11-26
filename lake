@@ -127,9 +127,8 @@ draw_screen() {
 }
 
 go_to_parent_directory() {
-	if [ "$show_selected" = 0 ] && [ ! "$(pwd)" = "/" ]; then
-		go_to '..' $(file_preview "$(dirname "$(pwd)")" | sed -ne "/^$(basename "$(pwd)" | esc_all)\$/=")
-	fi
+	[ "$show_selected" = 1 ] || [ "$(pwd)" = "/" ] && return
+	go_to '..' $(file_preview "$(dirname "$(pwd)")" | sed -ne "/^$(basename "$(pwd)" | esc_all)\$/=")
 }
 
 center_output() {
