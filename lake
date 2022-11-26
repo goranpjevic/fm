@@ -126,11 +126,6 @@ draw_screen() {
 	fi
 }
 
-go_to_parent_directory() {
-	[ "$show_selected" = 1 ] || [ "$(pwd)" = "/" ] && return
-	go_to '..' $(file_preview "$(dirname "$(pwd)")" | sed -ne "/^$(basename "$(pwd)" | esc_all)\$/=")
-}
-
 center_output() {
 	let "actual_line = $max_lines / 2"
 	let "start_line = $current_line - $actual_line"
@@ -264,7 +259,8 @@ read_keys() {
 				go_to $chosen_line
 				;;
 			'h'|'[D'|$'\u2')
-				go_to_parent_directory
+				[ "$show_selected" = 1 ] || [ "$(pwd)" = "/" ] && continue
+				go_to '..' $(file_preview "$(dirname "$(pwd)")" | sed -ne "/^$(basename "$(pwd)" | esc_all)\$/=")
 				;;
 			'H')
 				move_line $start_line
