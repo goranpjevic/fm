@@ -117,8 +117,7 @@ draw_screen() {
 	let "maximum_line_width = $(tput cols) / 2"
 	let "last_line=$(echo $output | wc -l)"
 	let "end_line = ${start_line:=1} + $maximum_lines - 1"
-	let "last_visible_line = $end_line"
-	[ "$last_visible_line" -gt "$last_line" ] && let "last_visible_line = $last_line"
+	last_visible_line=$([ "$end_line" -gt "$last_line" ] && echo $last_line || echo $end_line)
 	current_line=${1:=1}
 
 	if [ $output ]; then
