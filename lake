@@ -70,6 +70,10 @@ esc_all() {
 	sed -e 's/[]\/$*.^[]/\\&/g'
 }
 
+quote_all() {
+	sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/"
+}
+
 move_line() {
 	let "line_to_move_to = $1"
 	if [ "$line_to_move_to" -le "$number_of_lines" ] && [ "$line_to_move_to" -ge "1" ]; then
@@ -192,7 +196,7 @@ copy_or_move() {
 			tput cnorm
 			stty sane
 			selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
-			eval $selection_action -i $(echo $selected_lines | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -) .
+			eval $selection_action -i $(echo $selected_lines | quote_all | paste -sd ' ' -) .
 			selected_lines=
 		fi
 		draw_screen
@@ -222,8 +226,8 @@ redraw_screen() {
 shell_command() {
 	current_directory="$(pwd)"
 	user_input command_to_eval
-	one_line=$(echo $chosen_line | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/")
-	all_lines=$(echo $output | sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -)
+	one_line=$(echo $chosen_line | quote_all)/'\1'/")
+	all_lines=$(echo $output | quote_all | paste -sd ' ' -)
 	eval $command_to_eval:gs/$./$one_line/:gs/$%/$all_lines || read -sk1
 	[ $(pwd) != $current_directory ] && current_line=1
 	redraw_screen
