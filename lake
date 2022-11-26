@@ -194,8 +194,8 @@ copy_or_move() {
 		tput el
 		tput cnorm
 		stty sane
-		selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
-		eval $selection_action -i $(echo $selected_lines | quote_all | paste -sd ' ' -) . && selected_lines= || read -sk1
+		cp_or_mv=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
+		eval $cp_or_mv -i $(echo $selected_lines | quote_all | paste -sd ' ' -) . && selected_lines= || read -sk1
 	fi
 	draw_screen
 }
