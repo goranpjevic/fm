@@ -76,7 +76,7 @@ quote_all() {
 
 move_line() {
 	let "line_to_move_to = $1"
-	if [ "$line_to_move_to" -le "$number_of_lines" ] && [ "$line_to_move_to" -ge "1" ]; then
+	if [ "$line_to_move_to" -le "$last_line" ] && [ "$line_to_move_to" -ge "1" ]; then
 		update_position $current_line
 		tput cup $actual_line
 		echo $chosen_line | cut -c 1-$maximum_line_width
@@ -115,10 +115,10 @@ draw_screen() {
 
 	let "maximum_lines = $(tput lines) - 2"
 	let "maximum_line_width = $(tput cols) / 2"
-	let "number_of_lines=$(echo $output | wc -l)"
+	let "last_line=$(echo $output | wc -l)"
 	let "last_line_to_output = ${first_line_to_output:=1} + $maximum_lines - 1"
 	let "last_visible_line = $last_line_to_output"
-	[ "$last_visible_line" -gt "$number_of_lines" ] && let "last_visible_line = $number_of_lines"
+	[ "$last_visible_line" -gt "$last_line" ] && let "last_visible_line = $last_line"
 	current_line=${1:=1}
 
 	if [ $output ]; then
@@ -263,7 +263,7 @@ read_keys() {
 				move_line 1
 				;;
 			'G')
-				move_line $number_of_lines
+				move_line $last_line
 				;;
 			'l'|'[C'|$'\u6')
 				go_to $chosen_line
@@ -286,7 +286,7 @@ read_keys() {
 				;;
 			'd')
 				let "new_line = $current_line + ($maximum_lines / 2)"
-				move_line $([ $new_line -gt $number_of_lines ] && echo $number_of_lines || echo $new_line)
+				move_line $([ $new_line -gt $last_line ] && echo $last_line || echo $new_line)
 				;;
 			'z')
 				center_output
