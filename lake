@@ -186,19 +186,18 @@ select_file() {
 }
 
 copy_or_move() {
-	if [ $selected_lines ] && [ "$show_selected" = 0 ]; then
+	[ ! $selected_lines ] || [ "$show_selected" = 1 ] && return
+	tput cup $(tput lines)
+	tput el
+	if read -sq "?are you sure you want to $1 the selected files to the current directory? [y/N]"; then
 		tput cup $(tput lines)
 		tput el
-		if read -sq "?are you sure you want to $1 the selected files to the current directory? [y/N]"; then
-			tput cup $(tput lines)
-			tput el
-			tput cnorm
-			stty sane
-			selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
-			eval $selection_action -i $(echo $selected_lines | quote_all | paste -sd ' ' -) . && selected_lines= || read -sk1
-		fi
-		draw_screen
+		tput cnorm
+		stty sane
+		selection_action=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
+		eval $selection_action -i $(echo $selected_lines | quote_all | paste -sd ' ' -) . && selected_lines= || read -sk1
 	fi
+	draw_screen
 }
 
 prune_selected_files() {
