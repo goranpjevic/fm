@@ -167,15 +167,14 @@ search() {
 }
 
 select_file() {
-	if [ $output ]; then
-		file_to_select=$([ "$show_selected" = 0 ] && echo $(pwd)"/")$1
-		if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
-			selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
-		else
-			selected_lines=$(echo "$selected_lines\n$file_to_select" | sed "/^\s*$/d")
-		fi
-		move_line $current_line
+	[ ! $output ] && return
+	file_to_select=$([ "$show_selected" = 0 ] && echo $(pwd)"/")$1
+	if [ "$(echo $selected_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
+		selected_lines=$(echo $selected_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
+	else
+		selected_lines=$(echo "$selected_lines\n$file_to_select" | sed "/^\s*$/d")
 	fi
+	move_line $current_line
 }
 
 copy_or_move() {
