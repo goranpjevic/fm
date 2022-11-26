@@ -215,8 +215,9 @@ redraw_screen() {
 	prune_selected_files
 	all_files=$([ "$show_selected_files" = 0 ] && file_preview . || echo "$selected_lines")
 	let "number_of_files = $(echo $all_files | wc -l)"
-	if [ -e "$chosen_line" ]; then
-		current_line=$(echo $all_files | sed -n "/^$(echo $chosen_line | esc_all)\$/=")
+	line_number=$(echo $all_files | sed -n "/^$(echo $chosen_line | esc_all)\$/=")
+	if [ $line_number ]; then
+		current_line=$line_number
 	elif [ $number_of_files -lt $current_line ]; then
 		current_line=$([ $number_of_files = 0 ] && echo 1 || echo $number_of_files)
 	fi
