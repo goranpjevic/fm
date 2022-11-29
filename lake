@@ -42,6 +42,14 @@ print_preview() {
 	file_preview $1 $max_lines | cut -c 1-$max_line_width | sed -n "s/^/$prefix/;1,${max_lines}p"
 }
 
+esc_all() {
+	sed -e 's/[]\/$*.^[]/\\&/g'
+}
+
+quote_all() {
+	sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -
+}
+
 update_position() {
 	let "current_line = $1"
 	chosen_line=$(echo $output | sed "${current_line}q;d")
@@ -57,14 +65,6 @@ update_position() {
 	else
 		let "actual_line = $current_line - $start_line + 1"
 	fi
-}
-
-esc_all() {
-	sed -e 's/[]\/$*.^[]/\\&/g'
-}
-
-quote_all() {
-	sed "s/'/'\\\\''/g;s/\(.*\)/'\1'/" | paste -sd ' ' -
 }
 
 move_line() {
