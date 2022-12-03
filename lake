@@ -24,7 +24,7 @@ go_to() {
 file_preview() {
 	case $(file --dereference --brief $1) in
 		*directory*)
-			ls $([ "${show_hidden:=0}" = 1 ] && echo "-A") $1 2>/dev/null
+			ls $([ "${show_hidden:=0}" = 1 ] && echo '-A') $1 2>/dev/null
 			;;
 		*text*)
 			head -n $max_lines $1 | expand 2>/dev/null 
@@ -82,7 +82,7 @@ move_line() {
 
 		print_preview $chosen_line
 
-		selected_file=$(echo $([ "$show_selected" = 0 ] && echo $(pwd)"/")$chosen_line | esc_all)
+		selected_file=$(echo $([ "$show_selected" = 0 ] && echo $(pwd)'/')$chosen_line | esc_all)
 		[ $(echo $sel_lines | sed -n "/^${selected_file}\$/=") ] && tput rev
 		tput cup $(tput lines)
 		tput el
@@ -145,7 +145,7 @@ next() {
 	above_matches=$(echo $all_matches | awk "\$1<${current_line}")
 	sorted_matches="${below_matches}\n${above_matches}"
 	[ "${search_direction:=1}" = 0 ] && sorted_matches=$(echo $sorted_matches | tail -r)
-	line_to_move_to=$(echo $sorted_matches | sed "/^\s*$/d" | sed -n "1p")
+	line_to_move_to=$(echo $sorted_matches | sed "/^\s*$/d" | sed -n '1p')
 	[ $line_to_move_to ] && move_line $line_to_move_to
 }
 
@@ -174,7 +174,7 @@ search() {
 
 select_file() {
 	[ ! $output ] && return
-	file_to_select=$([ "$show_selected" = 0 ] && echo $(pwd)"/")$1
+	file_to_select=$([ "$show_selected" = 0 ] && echo $(pwd)'/')$1
 	if [ "$(echo $sel_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
 		sel_lines=$(echo $sel_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
 	else
@@ -192,7 +192,7 @@ copy_or_move() {
 		tput el
 		tput cnorm
 		stty sane
-		cp_or_mv=$([ $1 = "copy" ] && echo "cp -R" || echo "mv")
+		cp_or_mv=$([ $1 = 'copy' ] && echo 'cp -R' || echo 'mv')
 		eval $cp_or_mv -i $(echo $sel_lines | quote_all) . && sel_lines= || read -sk1
 	fi
 	redraw_screen
@@ -246,7 +246,7 @@ read_keys() {
 				go_to $chosen_line
 				;;
 			'h'|'[D'|$'\u2')
-				[ "$show_selected" = 1 ] || [ $(pwd) = "/" ] && continue
+				[ "$show_selected" = 1 ] || [ $(pwd) = '/' ] && continue
 				go_to .. $(file_preview .. | sed -n "/^$(basename "$(pwd)" | esc_all)\$/=")
 				;;
 			'H')
@@ -318,10 +318,10 @@ read_keys() {
 				draw_screen
 				;;
 			'c')
-				copy_or_move "copy"
+				copy_or_move 'copy'
 				;;
 			'm')
-				copy_or_move "move"
+				copy_or_move 'move'
 				;;
 			':')
 				shell_command
