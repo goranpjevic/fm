@@ -145,7 +145,7 @@ next() {
 	above_matches=$(echo $all_matches | awk "\$1<${current_line}")
 	sorted_matches="${below_matches}\n${above_matches}"
 	[ "${search_direction:=1}" = 0 ] && sorted_matches=$(echo $sorted_matches | tail -r)
-	line_to_move_to=$(echo $sorted_matches | sed "/^\s*$/d" | sed -n '1p')
+	line_to_move_to=$(echo $sorted_matches | sed '/^\s*$/d' | sed -n '1p')
 	[ $line_to_move_to ] && move_line $line_to_move_to
 }
 
@@ -178,7 +178,7 @@ select_file() {
 	if [ "$(echo $sel_lines | sed -n "/^$(echo $file_to_select | esc_all)$/=")" ]; then
 		sel_lines=$(echo $sel_lines | sed "/^$(echo $file_to_select | esc_all)$/d")
 	else
-		sel_lines=$(echo "$sel_lines\n$file_to_select" | sed "/^\s*$/d")
+		sel_lines=$(echo "$sel_lines\n$file_to_select" | sed '/^\s*$/d')
 	fi
 	move_line $current_line
 }
