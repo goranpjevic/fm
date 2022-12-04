@@ -212,7 +212,7 @@ shell_command() {
 	one_line=$(echo $chosen_line | quote_all)
 	all_lines=$(echo $output | quote_all)
 	eval $command_to_eval:gs/$./$one_line/:gs/$%/$all_lines || read -sk1
-	[ $(pwd) != $current_directory ] && current_line=1
+	[ "$(pwd)" != "$current_directory" ] && current_line=1
 	redraw_screen
 }
 
