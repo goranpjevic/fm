@@ -121,7 +121,7 @@ draw_screen() {
 
 redraw_screen() {
 	prune_selected_files
-	all_files=$([ "$show_selected" = 0 ] && file_preview . || echo "$sel_lines")
+	all_files=$([ "$show_selected" = 0 ] && echo "$(file_preview .)" || echo "$sel_lines")
 	let "number_of_files = $(echo $all_files | wc -l)"
 	line_number=$(echo $all_files | sed -n "/^$(echo $chosen_line | esc_all)\$/=")
 	if [ $line_number ]; then
