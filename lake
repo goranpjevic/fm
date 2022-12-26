@@ -243,7 +243,7 @@ read_keys() {
 				move_line $last_line
 				;;
 			'l'|'[C'|$'\u6')
-				go_to $chosen_line
+				[ $output ] && go_to $chosen_line
 				;;
 			'h'|'[D'|$'\u2')
 				[ "$show_selected" = 1 ] || [ $(pwd) = '/' ] && continue
