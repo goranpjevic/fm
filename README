@@ -15,10 +15,9 @@ installation:
 
       #start lake, and cd to last directory on exit
       l() {   
-              tmp="$(mktemp)"
-              lake ${1:=.} $tmp
-              cd "$(cat "$tmp")"
-              rm -f "$tmp"
+              ldir="$HOME/.local/var/lake/ldir"
+              lake ${1:=.} $ldir
+              cd "$(cat "$ldir")"
       }
 
 notes:
