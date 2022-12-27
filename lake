@@ -221,7 +221,10 @@ quit() {
 	tput rmcup
 	tput cnorm
 	stty sane
-	[ $1 ] && pwd >> $1
+	if [ $1 ]; then
+		mkdir -p "$(dirname "$1")"
+		pwd >> $1
+	fi
 	exit
 }
 
