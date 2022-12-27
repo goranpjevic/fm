@@ -223,7 +223,7 @@ quit() {
 	stty sane
 	if [ $1 ]; then
 		mkdir -p "$(dirname "$1")"
-		pwd >> $1
+		pwd > $1
 	fi
 	exit
 }
